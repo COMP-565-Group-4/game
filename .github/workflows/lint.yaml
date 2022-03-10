@@ -31,6 +31,6 @@ jobs:
           wget -q -O- "${LLVM_URL}" | tar -xJ --strip-components=2 --wildcards -C "${RUNNER_TEMP}/${LLVM_DIR}" '*/bin/clang-format'
 
       - name: Add clang-format to PATH
-        run: echo "${RUNNER_TEMP}/${LLVM_DIR}" >> $GITHUB_PATH
+        run: chmod +x "${RUNNER_TEMP}/${LLVM_DIR}/clang-format" && echo "${RUNNER_TEMP}/${LLVM_DIR}" >> $GITHUB_PATH
 
       - uses: pre-commit/action@v2.0.3
