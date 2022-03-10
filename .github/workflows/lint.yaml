@@ -33,4 +33,8 @@ jobs:
       - name: Add clang-format to PATH
         run: chmod +x "${RUNNER_TEMP}/${LLVM_DIR}/clang-format" && echo "${RUNNER_TEMP}/${LLVM_DIR}" >> $GITHUB_PATH
 
+      - run: whereis clang-format
+      - run: which clang-format
+      - run: clang-format --version
+
       - uses: pre-commit/action@v2.0.3
