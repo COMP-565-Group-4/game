@@ -12,6 +12,10 @@ public class StarterAssetsInputs : MonoBehaviour
     public bool jump;
     public bool sprint;
 
+    // custom input values
+    public bool interact;
+    public bool grab;
+
     [Header("Movement Settings")]
     public bool analogMovement;
 
@@ -43,6 +47,18 @@ public class StarterAssetsInputs : MonoBehaviour
     {
         SprintInput(value.isPressed);
     }
+
+    // custom inputs below
+
+    public void OnInteract(InputValue value)
+    {
+        InteractInput(value.isPressed);
+    }
+
+    public void OnGrab(InputValue value)
+    {
+        GrabInput(value.isPressed);
+    }
 #else
     // old input sys if we do decide to have it (most likely wont)...
 #endif
@@ -65,6 +81,18 @@ public class StarterAssetsInputs : MonoBehaviour
     public void SprintInput(bool newSprintState)
     {
         sprint = newSprintState;
+    }
+
+    // custom inputs below
+
+    public void InteractInput(bool newInteractState)
+    {
+        interact = newInteractState;
+    }
+
+    public void GrabInput(bool newGrabState)
+    {
+        grab = newGrabState;
     }
 
 #if !UNITY_IOS || !UNITY_ANDROID

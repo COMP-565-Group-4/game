@@ -74,6 +74,8 @@ public class FirstPersonController : MonoBehaviour
     private StarterAssetsInputs _input;
     private GameObject _mainCamera;
 
+    private Camera _cam;
+
     private const float _threshold = 0.01f;
 
     private bool IsCurrentDeviceMouse => _playerInput.currentControlScheme == "KeyboardMouse";
@@ -92,6 +94,8 @@ public class FirstPersonController : MonoBehaviour
         _input = GetComponent<StarterAssetsInputs>();
         _playerInput = GetComponent<PlayerInput>();
 
+        _cam = _mainCamera.GetComponent<Camera>();
+
         // reset our timeouts on start
         _jumpTimeoutDelta = JumpTimeout;
         _fallTimeoutDelta = FallTimeout;
@@ -102,6 +106,8 @@ public class FirstPersonController : MonoBehaviour
         JumpAndGravity();
         GroundedCheck();
         Move();
+
+        Interact();
     }
 
     private void LateUpdate()
@@ -266,6 +272,23 @@ public class FirstPersonController : MonoBehaviour
             ),
             GroundedRadius
         );
+    }
+
+    // custom control behaviors below
+
+    private void Interact()
+    {
+        if(_input.interact) 
+        {
+            Ray ray = _cam.ViewportPointToRay(new Vector3(0.5F, 0.5F, 0));
+            RaycastHit hit;
+            if (Physics.Raycast(ray, out hit))
+                print("I'm looking at " + hit.transform.name);
+            else
+                print("I'm looking at nothing!");
+            
+            _input.interact = false;
+        }
     }
 }
 }
