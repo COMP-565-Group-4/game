@@ -7,7 +7,7 @@ namespace TMPro {
 /// </summary>
 [Serializable]
 //[CreateAssetMenu(fileName = "InputValidator - Digits.asset", menuName = "TextMeshPro/Input
-//Validators/Digits", order = 100)]
+// Validators/Digits", order = 100)]
 public class TMP_DigitValidator : TMP_InputValidator
 {
     // Custom text input validation function
