@@ -34,7 +34,14 @@ public class FirstPersonController : MonoBehaviour
     [Tooltip("Time required to pass before entering the fall state. Useful for walking down stairs"
     )]
     public float FallTimeout = 0.15f;
+    
+    [Space(10)]
+    [Tooltip("Maximum distance from which the player can interact with an object")]
+    public float InteractDistance = 2;
+    [Tooltip("Maximum distance from which the player can grab an object")]
+    public float GrabDistance = 2;
 
+    [Space(10)]
     [Header("Player Grounded")]
     [Tooltip(
         "If the character is grounded or not. Not part of the CharacterController built in grounded check"
@@ -282,10 +289,24 @@ public class FirstPersonController : MonoBehaviour
         {
             Ray ray = _cam.ViewportPointToRay(new Vector3(0.5F, 0.5F, 0));
             RaycastHit hit;
-            if (Physics.Raycast(ray, out hit))
+            if (Physics.Raycast(ray, out hit, InteractDistance))
+            {
                 print("I'm looking at " + hit.transform.name);
+                if (hit.transform.tag == "Interactable")
+                {
+                    print(hit.transform.name + " is interactable!");
+                    hit.transform.SendMessage("Interaction");
+                }
+                else
+                {
+                    print(hit.transform.name + " is not interactable.");
+                }
+            }
             else
+            {
                 print("I'm looking at nothing!");
+
+            }
             
             _input.interact = false;
         }
