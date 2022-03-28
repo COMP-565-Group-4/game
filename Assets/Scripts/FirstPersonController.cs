@@ -41,7 +41,10 @@ public class FirstPersonController : MonoBehaviour
     [Tooltip("Maximum distance from which the player can grab an object")]
     public float GrabDistance = 2;
 
-    [Space(10)]
+    [Header("Player Items")]
+    [Tooltip("Whether the player can swap items.")]
+    public bool SwapItems = true; 
+
     [Header("Player Grounded")]
     [Tooltip(
         "If the character is grounded or not. Not part of the CharacterController built in grounded check"
@@ -115,6 +118,7 @@ public class FirstPersonController : MonoBehaviour
         Move();
 
         Interact();
+        Grab();
     }
 
     private void LateUpdate()
@@ -295,7 +299,7 @@ public class FirstPersonController : MonoBehaviour
                 if (hit.transform.tag == "Interactable")
                 {
                     print(hit.transform.name + " is interactable!");
-                    hit.transform.SendMessage("Interaction");
+                    hit.transform.SendMessage("Interaction"); // fire off the method that makes the object do its thing
                 }
                 else
                 {
@@ -309,6 +313,54 @@ public class FirstPersonController : MonoBehaviour
             }
             
             _input.interact = false;
+        }
+    }
+
+    private void Grab()
+    {
+        if(_input.grab) 
+        {
+            Ray ray = _cam.ViewportPointToRay(new Vector3(0.5F, 0.5F, 0));
+            RaycastHit hit;
+            if (Physics.Raycast(ray, out hit, GrabDistance))
+            {
+                if (hit.transform.tag == "Holdable")
+                {
+                    print(hit.transform.name + " is grabbable!");
+                    if (Inventory.HeldItem == null)
+                    {
+                        Inventory.HeldItem = hit.transform.gameObject;
+                        hit.transform.gameObject.SetActive(false);
+                        print("I'm holding a " + Inventory.HeldItem.name + "!");
+                    }
+                    else
+                    {
+                        if (SwapItems == true)
+                        {
+                            Inventory.HeldItem.transform.position = hit.transform.gameObject.transform.position;
+                            Inventory.HeldItem.SetActive(true);
+                            print("Swapping " + Inventory.HeldItem.name + " for " + hit.transform.gameObject.name + "...");
+                            hit.transform.gameObject.SetActive(false);
+                            Inventory.HeldItem = hit.transform.gameObject;
+                        }
+                        else
+                        {
+                            print("Cannot pick up " + hit.transform.name + ", currently holding a " + Inventory.HeldItem.name);
+                        }
+                    }
+
+                }
+                else
+                {
+                    print(hit.transform.name + " is not grabbable.");
+                }
+            }
+            else
+            {
+                print("I'm reaching for nothing!");
+            }
+            
+            _input.grab = false;
         }
     }
 }
