@@ -85,6 +85,7 @@ public class FirstPersonController : MonoBehaviour
     private GameObject _mainCamera;
 
     private Camera _cam;
+    private Ray _ray;
 
     private const float _threshold = 0.01f;
 
@@ -117,6 +118,7 @@ public class FirstPersonController : MonoBehaviour
         GroundedCheck();
         Move();
 
+        DoRaycast();
         Interact();
         Grab();
     }
@@ -287,13 +289,17 @@ public class FirstPersonController : MonoBehaviour
 
     // custom control behaviors below
 
+    private void DoRaycast()
+    {
+        _ray = _cam.ViewportPointToRay(new Vector3(0.5F, 0.5F, 0));
+    }
+
     private void Interact()
     {
         if(_input.interact) 
         {
-            Ray ray = _cam.ViewportPointToRay(new Vector3(0.5F, 0.5F, 0));
             RaycastHit hit;
-            if (Physics.Raycast(ray, out hit, InteractDistance))
+            if (Physics.Raycast(_ray, out hit, InteractDistance))
             {
                 print("I'm looking at " + hit.transform.name);
                 if (hit.transform.tag == "Interactable")
@@ -318,17 +324,17 @@ public class FirstPersonController : MonoBehaviour
 
     private void Grab()
     {
-        if(_input.grab) 
+        if(_input.grab) // player pushes the button
         {
-            Ray ray = _cam.ViewportPointToRay(new Vector3(0.5F, 0.5F, 0));
             RaycastHit hit;
-            if (Physics.Raycast(ray, out hit, GrabDistance))
+            if (Physics.Raycast(_ray, out hit, GrabDistance)) // we hit an object
             {
-                if (hit.transform.tag == "Holdable")
+                if (hit.transform.tag == "Holdable") // object is flagged as holdable
                 {
                     print(hit.transform.name + " is grabbable!");
-                    if (Inventory.HeldItem == null)
+                    if (Inventory.HeldItem == null) // we aren't holding anything
                     {
+                        // pick up object (should this be a method on the Inventory controller?)
                         Inventory.HeldItem = hit.transform.gameObject;
                         hit.transform.gameObject.SetActive(false);
                         print("I'm holding a " + Inventory.HeldItem.name + "!");
@@ -348,9 +354,19 @@ public class FirstPersonController : MonoBehaviour
                             print("Cannot pick up " + hit.transform.name + ", currently holding a " + Inventory.HeldItem.name);
                         }
                     }
-
                 }
-                else
+                else if (hit.transform.tag == "Container")
+                {
+                    if (Inventory.HeldItem == null)
+                    {
+                        hit.transform.SendMessage("Extract");
+                    }
+                    else
+                    {
+                        hit.transform.SendMessage("Insert");
+                    }
+                } 
+                else 
                 {
                     print(hit.transform.name + " is not grabbable.");
                 }
