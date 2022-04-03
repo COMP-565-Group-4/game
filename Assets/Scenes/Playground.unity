@@ -137,8 +137,8 @@ GameObject:
   - component: {fileID: 63493243}
   - component: {fileID: 63493241}
   m_Layer: 0
-  m_Name: Cube
-  m_TagString: Untagged
+  m_Name: Oven
+  m_TagString: Container
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -152,7 +152,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 63493240}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4cf53d2091143704983e7edae37a75ca, type: 3}
+  m_Script: {fileID: 11500000, guid: f63fb0b862a90b84c8ddcd834e3ea860, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!65 &63493243
