@@ -302,20 +302,12 @@ public class FirstPersonController : MonoBehaviour
             if (Physics.Raycast(_ray, out hit, InteractDistance))
             {
                 print("I'm looking at " + hit.transform.name);
-                if (hit.transform.tag == "Interactable")
-                {
-                    print(hit.transform.name + " is interactable!");
-                    hit.transform.SendMessage("Interaction"); // fire off the method that makes the object do its thing
-                }
-                else
-                {
-                    print(hit.transform.name + " is not interactable.");
-                }
+                // here we'd check for the "Interactable" tag, but that'd get in the way of the other tags so let's not bother
+                hit.transform.SendMessage("Interaction", SendMessageOptions.DontRequireReceiver); // fire off the method that makes the object do its thing
             }
             else
             {
                 print("I'm looking at nothing!");
-
             }
             
             _input.interact = false;
