@@ -40,6 +40,8 @@ public class FirstPersonController : MonoBehaviour
     public float InteractDistance = 2;
     [Tooltip("Maximum distance from which the player can grab an object")]
     public float GrabDistance = 2;
+    [Tooltip("Maximum distance from which the player can hover their mouse over an interactable object")]
+    public float HoverDistance = 2;
 
     [Header("Player Items")]
     [Tooltip("Whether the player can swap items.")]
@@ -119,6 +121,7 @@ public class FirstPersonController : MonoBehaviour
         Move();
 
         DoRaycast();
+        Hover();
         Interact();
         Grab();
     }
@@ -292,6 +295,15 @@ public class FirstPersonController : MonoBehaviour
     private void DoRaycast()
     {
         _ray = _cam.ViewportPointToRay(new Vector3(0.5F, 0.5F, 0));
+    }
+
+    private void Hover()
+    {
+        RaycastHit hit;
+        if (Physics.Raycast(_ray, out hit, HoverDistance))
+        {
+            hit.transform.SendMessage("Hover", SendMessageOptions.DontRequireReceiver);
+        }
     }
 
     private void Interact()
