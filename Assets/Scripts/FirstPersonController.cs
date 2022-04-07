@@ -34,18 +34,20 @@ public class FirstPersonController : MonoBehaviour
     [Tooltip("Time required to pass before entering the fall state. Useful for walking down stairs"
     )]
     public float FallTimeout = 0.15f;
-    
+
     [Space(10)]
     [Tooltip("Maximum distance from which the player can interact with an object")]
     public float InteractDistance = 2;
     [Tooltip("Maximum distance from which the player can grab an object")]
     public float GrabDistance = 2;
-    [Tooltip("Maximum distance from which the player can hover their mouse over an interactable object")]
+    [Tooltip(
+        "Maximum distance from which the player can hover their mouse over an interactable object"
+    )]
     public float HoverDistance = 2;
 
     [Header("Player Items")]
     [Tooltip("Whether the player can swap items.")]
-    public bool SwapItems = true; 
+    public bool SwapItems = true;
 
     [Header("Player Grounded")]
     [Tooltip(
@@ -300,35 +302,33 @@ public class FirstPersonController : MonoBehaviour
     private void Hover()
     {
         RaycastHit hit;
-        if (Physics.Raycast(_ray, out hit, HoverDistance))
-        {
+        if (Physics.Raycast(_ray, out hit, HoverDistance)) {
             hit.transform.SendMessage("Hover", SendMessageOptions.DontRequireReceiver);
         }
     }
 
     private void Interact()
     {
-        if(_input.interact) 
-        {
+        if (_input.interact) {
             RaycastHit hit;
-            if (Physics.Raycast(_ray, out hit, InteractDistance))
-            {
+            if (Physics.Raycast(_ray, out hit, InteractDistance)) {
                 print("I'm looking at " + hit.transform.name);
-                // here we'd check for the "Interactable" tag, but that'd get in the way of the other tags so let's not bother
-                hit.transform.SendMessage("Interaction", SendMessageOptions.DontRequireReceiver); // fire off the method that makes the object do its thing
-            }
-            else
-            {
+                // here we'd check for the "Interactable" tag, but that'd get in the way of the
+                // other tags so let's not bother
+                hit.transform.SendMessage(
+                    "Interaction", SendMessageOptions.DontRequireReceiver
+                ); // fire off the method that makes the object do its thing
+            } else {
                 print("I'm looking at nothing!");
             }
-            
+
             _input.interact = false;
         }
     }
 
     private void Grab()
     {
-        if(_input.grab) // player pushes the button
+        if (_input.grab) // player pushes the button
         {
             RaycastHit hit;
             if (Physics.Raycast(_ray, out hit, GrabDistance)) // we hit an object
@@ -342,44 +342,37 @@ public class FirstPersonController : MonoBehaviour
                         Inventory.HeldItem = hit.transform.gameObject;
                         hit.transform.gameObject.SetActive(false);
                         print("I'm holding a " + Inventory.HeldItem.name + "!");
-                    }
-                    else
-                    {
-                        if (SwapItems == true)
-                        {
-                            Inventory.HeldItem.transform.position = hit.transform.gameObject.transform.position;
+                    } else {
+                        if (SwapItems == true) {
+                            Inventory.HeldItem.transform.position =
+                                hit.transform.gameObject.transform.position;
                             Inventory.HeldItem.SetActive(true);
-                            print("Swapping " + Inventory.HeldItem.name + " for " + hit.transform.gameObject.name + "...");
+                            print(
+                                "Swapping " + Inventory.HeldItem.name + " for "
+                                + hit.transform.gameObject.name + "..."
+                            );
                             hit.transform.gameObject.SetActive(false);
                             Inventory.HeldItem = hit.transform.gameObject;
-                        }
-                        else
-                        {
-                            print("Cannot pick up " + hit.transform.name + ", currently holding a " + Inventory.HeldItem.name);
+                        } else {
+                            print(
+                                "Cannot pick up " + hit.transform.name + ", currently holding a "
+                                + Inventory.HeldItem.name
+                            );
                         }
                     }
-                }
-                else if (hit.transform.tag == "Container")
-                {
-                    if (Inventory.HeldItem == null)
-                    {
+                } else if (hit.transform.tag == "Container") {
+                    if (Inventory.HeldItem == null) {
                         hit.transform.SendMessage("Extract");
-                    }
-                    else
-                    {
+                    } else {
                         hit.transform.SendMessage("Insert");
                     }
-                } 
-                else 
-                {
+                } else {
                     print(hit.transform.name + " is not grabbable.");
                 }
-            }
-            else
-            {
+            } else {
                 print("I'm reaching for nothing!");
             }
-            
+
             _input.grab = false;
         }
     }

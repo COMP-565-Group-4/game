@@ -20,13 +20,10 @@ public class OutlineHoverScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (_beingLookedAt)
-        {
+        if (_beingLookedAt) {
             _beingLookedAt = false;
             _outline.enabled = true;
-        }
-        else
-        {
+        } else {
             _outline.enabled = false;
         }
     }
