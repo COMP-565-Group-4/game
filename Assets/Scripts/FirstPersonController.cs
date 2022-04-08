@@ -118,6 +118,9 @@ public class FirstPersonController : MonoBehaviour
 
     private void Update()
     {
+        if (_input.isPaused)
+            return;
+
         JumpAndGravity();
         GroundedCheck();
         Move();
