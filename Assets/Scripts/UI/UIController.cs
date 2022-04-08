@@ -15,6 +15,7 @@ public class UIController : MonoBehaviour
     private void Update()
     {
         pauseMenu.SetActive(inputs.isPaused);
+        Cursor.lockState = inputs.isPaused ? CursorLockMode.None : CursorLockMode.Locked;
     }
 }
 }
