@@ -118,19 +118,24 @@ public class FirstPersonController : MonoBehaviour
 
     private void Update()
     {
-        JumpAndGravity();
-        GroundedCheck();
-        Move();
+        Pause();
+        if (!GameState.GamePaused) {
+            JumpAndGravity();
+            GroundedCheck();
+            Move();
 
-        DoRaycast();
-        Hover();
-        Interact();
-        Grab();
+            DoRaycast();
+            Hover();
+            Interact();
+            Grab();
+        }
     }
 
     private void LateUpdate()
     {
-        CameraRotation();
+        if (!GameState.GamePaused) {
+            CameraRotation();
+        }
     }
 
     private void GroundedCheck()
@@ -294,6 +299,19 @@ public class FirstPersonController : MonoBehaviour
 
     // custom control behaviors below
 
+    private void Pause()
+    {
+        if (_input.pause) {
+            if (!GameState.GamePaused) {
+                GameState.Pause();
+            } else {
+                GameState.Resume();
+            }
+
+            _input.pause = false;
+        }
+    }
+
     private void DoRaycast()
     {
         _ray = _cam.ViewportPointToRay(new Vector3(0.5F, 0.5F, 0));
@@ -303,7 +321,9 @@ public class FirstPersonController : MonoBehaviour
     {
         RaycastHit hit;
         if (Physics.Raycast(_ray, out hit, HoverDistance)) {
-            hit.transform.SendMessage("Hover", SendMessageOptions.DontRequireReceiver);
+            if (hit.transform.GetComponent<MonoBehaviour>() != null) {
+                hit.transform.SendMessage("Hover", SendMessageOptions.DontRequireReceiver);
+            }
         }
     }
 
