@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class GameState : MonoBehaviour
 {
-    public static int CurrentRound = 0;
+    public static int CurrentRound = 1;
     public static int CurrentMoney = 0;
     public static int LastRoundMoney = 0;
     public static bool GamePaused = false;
@@ -19,6 +19,7 @@ public class GameState : MonoBehaviour
         _pauseMenu = GameObject.Find("PauseMenu");
 
         _pauseMenu.SetActive(false);
+        StartRound();
     }
 
     // Update is called once per frame
@@ -53,12 +54,16 @@ public class GameState : MonoBehaviour
 
     void StartRound()
     {
+        print("Round " + CurrentRound + " started!");
         // initialize some variables
         RoundTimer.SetRound(CurrentRound);
+        // start round
+        RoundTimer.TimerStart();
     }
 
     void EndRound()
     {
+        print("Round " + CurrentRound + " finished!");
         // tally results
         LastRoundMoney = CurrentMoney;
         // increment round number
