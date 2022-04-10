@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class OvenScript : MonoBehaviour
 {
@@ -75,10 +76,12 @@ public class OvenScript : MonoBehaviour
 
         // look up current recipe in recipe book
         if (RecipeBook.Recipes.ContainsKey(_recipe)) {
+            print("Recipe found!");
             // if recipe is present, load the associated dish from Resources/Meals prefab
             _output = Resources.Load<GameObject>("Meals/" + RecipeBook.Recipes[_recipe]);
 
             _busy = true;
+            _done = true;
             // wait some amount of time to cook it, and then proceed...
         } else {
             print("ERROR: Recipe not found!");
