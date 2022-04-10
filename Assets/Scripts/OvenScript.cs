@@ -78,7 +78,8 @@ public class OvenScript : MonoBehaviour
         if (RecipeBook.Recipes.ContainsKey(_recipe)) {
             print("Recipe found!");
             // if recipe is present, load the associated dish from Resources/Meals prefab
-            _output = Resources.Load<GameObject>("Meals/" + RecipeBook.Recipes[_recipe]);
+            _output =
+                Instantiate(Resources.Load<GameObject>("Meals/" + RecipeBook.Recipes[_recipe]));
 
             _busy = true;
             _done = true;
