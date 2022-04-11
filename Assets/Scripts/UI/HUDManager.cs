@@ -15,6 +15,18 @@ public class HUDManager : MonoBehaviour
     [Tooltip("TMP component for the money text")]
     public TextMeshProUGUI MoneyText;
 
+    [Tooltip("TMP component for the order's recipe's name text")]
+    public TextMeshProUGUI OrderRecipeNameText;
+
+    [Tooltip("TMP component for the order number text")]
+    public TextMeshProUGUI OrderNumberText;
+
+    [Tooltip("TMP component for the order's recipe text")]
+    public TextMeshProUGUI OrderRecipeText;
+
+    [Tooltip("TMP component for the held item name text")]
+    public TextMeshProUGUI HeldItemNameText;
+
     [Header("Values")]
     [SerializeField]
     [Tooltip("Current round")]
@@ -28,6 +40,10 @@ public class HUDManager : MonoBehaviour
     [Tooltip("Amount of money the player possesses")]
     private uint money;
 
+    [SerializeField]
+    [Tooltip("Name of the currently held item")]
+    private string heldItem;
+
     [Header("Time")]
     [SerializeField]
     [Tooltip("Minutes remaining for the current round")]
@@ -36,6 +52,23 @@ public class HUDManager : MonoBehaviour
     [SerializeField]
     [Tooltip("Seconds remaining for the current round")]
     private uint seconds;
+
+    [Header("Orders")]
+    [SerializeField]
+    [Tooltip("Currently displayed order's number")]
+    private uint order;
+
+    [SerializeField]
+    [Tooltip("Total number of orders")]
+    private uint totalOrders;
+
+    [SerializeField]
+    [Tooltip("Currently displayed order's recipe's name")]
+    private string orderRecipeName;
+
+    [SerializeField]
+    [Tooltip("Currently displayed order's recipe")]
+    private string orderRecipe;
 
     public uint Round
     {
@@ -64,6 +97,15 @@ public class HUDManager : MonoBehaviour
         }
     }
 
+    public string HeldItem
+    {
+        get => heldItem;
+        set {
+            heldItem = value;
+            HeldItemNameText.text = value;
+        }
+    }
+
     public uint Minutes
     {
         get => minutes;
@@ -82,6 +124,42 @@ public class HUDManager : MonoBehaviour
         }
     }
 
+    public uint Order
+    {
+        get => order;
+        set {
+            order = value;
+            OrderNumberText.text = $"{value}/{TotalOrders}";
+        }
+    }
+
+    public uint TotalOrders
+    {
+        get => totalOrders;
+        set {
+            totalOrders = value;
+            OrderNumberText.text = $"{Order}/{value}";
+        }
+    }
+
+    public string OrderRecipeName
+    {
+        get => orderRecipeName;
+        set {
+            orderRecipeName = value;
+            OrderRecipeNameText.text = value;
+        }
+    }
+
+    public string OrderRecipe
+    {
+        get => orderRecipe;
+        set {
+            orderRecipe = value;
+            OrderRecipeText.text = value;
+        }
+    }
+
 #if UNITY_EDITOR
     /// <summary>
     /// Triggers setters of properties when a backing field is updated via the inspector.
@@ -91,8 +169,13 @@ public class HUDManager : MonoBehaviour
         Round = round;
         TotalRounds = totalRounds;
         Money = money;
+        HeldItem = heldItem;
         Minutes = minutes;
         Seconds = seconds;
+        Order = order;
+        TotalOrders = totalOrders;
+        OrderRecipeName = orderRecipeName;
+        OrderRecipe = orderRecipe;
     }
 #endif
 }
