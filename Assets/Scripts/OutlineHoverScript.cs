@@ -28,7 +28,7 @@ public class OutlineHoverScript : MonoBehaviour
         }
     }
 
-    void Hover()
+    void OnHover()
     {
         _beingLookedAt = true;
     }

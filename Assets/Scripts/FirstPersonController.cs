@@ -322,7 +322,7 @@ public class FirstPersonController : MonoBehaviour
         RaycastHit hit;
         if (Physics.Raycast(_ray, out hit, HoverDistance)) {
             if (hit.transform.GetComponent<MonoBehaviour>() != null) {
-                hit.transform.SendMessage("Hover", SendMessageOptions.DontRequireReceiver);
+                hit.transform.SendMessage("OnHover", SendMessageOptions.DontRequireReceiver);
             }
         }
     }
