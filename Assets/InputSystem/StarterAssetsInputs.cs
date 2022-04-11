@@ -15,6 +15,8 @@ public class StarterAssetsInputs : MonoBehaviour
     // custom input values
     public bool interact;
     public bool grab;
+    public bool isPaused;
+    public bool showNextOrder;
 
     [Header("Movement Settings")]
     public bool analogMovement;
@@ -59,6 +61,16 @@ public class StarterAssetsInputs : MonoBehaviour
     {
         GrabInput(value.isPressed);
     }
+
+    public void OnPause(InputValue value)
+    {
+        PauseInput(value.isPressed);
+    }
+
+    public void OnNextOrder(InputValue value)
+    {
+        NextOrderInput(value.isPressed);
+    }
 #else
     // old input sys if we do decide to have it (most likely wont)...
 #endif
@@ -93,6 +105,18 @@ public class StarterAssetsInputs : MonoBehaviour
     public void GrabInput(bool newGrabState)
     {
         grab = newGrabState;
+    }
+
+    public void PauseInput(bool newPauseState)
+    {
+        // Toggle the pause state if the input was activated.
+        if (newPauseState)
+            isPaused = !isPaused;
+    }
+
+    public void NextOrderInput(bool newNextOrderState)
+    {
+        showNextOrder = newNextOrderState;
     }
 
 #if !UNITY_IOS || !UNITY_ANDROID
