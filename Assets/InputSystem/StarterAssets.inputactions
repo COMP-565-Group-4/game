@@ -62,7 +62,16 @@
                 {
                     "name": "Pause",
                     "type": "Button",
-                    "id": "0cc07cfd-2587-4faf-a9b5-65fd4cd42ae4",
+                    "id": "4d9b7806-5abe-4387-a315-117161f87b48",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Next Order",
+                    "type": "Button",
+                    "id": "dd698e18-4640-44a3-a5ad-1de7b3510acc",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -270,12 +279,23 @@
                 },
                 {
                     "name": "",
-                    "id": "8e19fd0f-4e36-4ce1-b851-57cbc65918cf",
+                    "id": "1541a2b9-fffa-4cc9-b414-9db5c4e2e356",
                     "path": "<Keyboard>/escape",
                     "interactions": "",
                     "processors": "",
                     "groups": "KeyboardMouse",
                     "action": "Pause",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "9659933c-6ce0-4b5e-ad4e-fd70d02df782",
+                    "path": "<Keyboard>/tab",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "KeyboardMouse",
+                    "action": "Next Order",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
