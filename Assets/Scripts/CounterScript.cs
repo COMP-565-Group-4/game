@@ -18,8 +18,7 @@ public class CounterScript : MonoBehaviour
     void Insert()
     {
         // retrieve the object from player's inventory
-        GameObject dish = Inventory.HeldItem;
-        Inventory.HeldItem = null;
+        GameObject dish = Inventory.RemoveItem();
 
         // move dish to counter and display it
         dish.transform.position = transform.position;

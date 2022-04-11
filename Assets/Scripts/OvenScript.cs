@@ -6,7 +6,7 @@ using System.Linq;
 public class OvenScript : MonoBehaviour
 {
     private bool _busy;
-    private bool _done;
+    private bool _containsFinishedDish;
     private List<GameObject> _input;
     private List<string> _recipe;
     private GameObject _output;
@@ -30,13 +30,12 @@ public class OvenScript : MonoBehaviour
 
     void Insert()
     {
-        if (_done) {
+        if (_containsFinishedDish) {
             print("ERROR: Oven contains a finished dish. Remove it first!");
         } else if (!_busy) {
             // add inserted object to _input
             print("Adding " + Inventory.HeldItem.name + " to container...");
-            _input.Add(Inventory.HeldItem);
-            Inventory.HeldItem = null;
+            _input.Add(Inventory.RemoveItem());
         } else {
             // oven is currently busy, don't let player put anything in
             print("ERROR: Oven is busy!");
@@ -45,15 +44,17 @@ public class OvenScript : MonoBehaviour
 
     void Extract()
     {
-        if (_done) {
+        if (_containsFinishedDish) {
             // oven is done, retrieve the finished dish from _output
-            Inventory.HeldItem = _output;
+            Inventory.AddItem(_output);
             _output = null;
-            _done = false;
+
+            // now that
+            _containsFinishedDish = false;
         } else if (!_busy) {
             // oven hasn't started yet, ingredients can be removed from _input
             print("Removing " + _input[_input.Count - 1].name + " from container...");
-            Inventory.HeldItem = _input[_input.Count - 1];
+            Inventory.AddItem(_input[_input.Count - 1]);
             _input.RemoveAt(_input.Count - 1);
         } else {
             // oven is currently busy, don't let player take anything out
@@ -80,10 +81,11 @@ public class OvenScript : MonoBehaviour
             // if recipe is present, load the associated dish from Resources/Meals prefab
             _output =
                 Instantiate(Resources.Load<GameObject>("Meals/" + RecipeBook.Recipes[_recipe]));
+            _output.SetActive(false);
             _output.name = RecipeBook.Recipes[_recipe];
 
             _busy = true;
-            _done = true;
+            _containsFinishedDish = true;
             // wait some amount of time to cook it, and then proceed...
         } else {
             print("ERROR: Recipe not found!");

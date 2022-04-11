@@ -355,24 +355,17 @@ public class FirstPersonController : MonoBehaviour
             {
                 if (hit.transform.tag == "Holdable") // object is flagged as holdable
                 {
-                    print(hit.transform.name + " is grabbable!");
                     if (Inventory.HeldItem == null) // we aren't holding anything
                     {
-                        // pick up object (should this be a method on the Inventory controller?)
-                        Inventory.HeldItem = hit.transform.gameObject;
-                        hit.transform.gameObject.SetActive(false);
-                        print("I'm holding a " + Inventory.HeldItem.name + "!");
+                        // pick up object
+                        Inventory.AddItem(hit.transform.gameObject);
                     } else {
                         if (SwapItems == true) {
-                            Inventory.HeldItem.transform.position =
+                            GameObject oldItem = Inventory.RemoveItem();
+                            oldItem.transform.position =
                                 hit.transform.gameObject.transform.position;
-                            Inventory.HeldItem.SetActive(true);
-                            print(
-                                "Swapping " + Inventory.HeldItem.name + " for "
-                                + hit.transform.gameObject.name + "..."
-                            );
-                            hit.transform.gameObject.SetActive(false);
-                            Inventory.HeldItem = hit.transform.gameObject;
+                            oldItem.SetActive(true);
+                            Inventory.AddItem(hit.transform.gameObject);
                         } else {
                             print(
                                 "Cannot pick up " + hit.transform.name + ", currently holding a "
