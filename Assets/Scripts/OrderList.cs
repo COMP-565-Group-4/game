@@ -63,6 +63,7 @@ public class OrderList : MonoBehaviour
         newOrder.Price = DefaultOrderPrice;
         newOrder.RequestedItem = Dishes[index];
         newCountdown.Length = BaseOrderTimeLimit;
+        newOrderObject.name = "Order";
 
         print("New order: " + newOrder.RequestedItem + " for " + newOrder.Price + " gold!");
         Orders.Add(newOrder);
