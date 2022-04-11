@@ -15,7 +15,9 @@ public class StarterAssetsInputs : MonoBehaviour
     // custom input values
     public bool interact;
     public bool grab;
-    public bool isPaused;
+    public bool pause;
+  
+    public bool isPaused; // having two variables is weird but we'll just leave it
     public bool showNextOrder;
 
     [Header("Movement Settings")]
@@ -71,6 +73,7 @@ public class StarterAssetsInputs : MonoBehaviour
     {
         NextOrderInput(value.isPressed);
     }
+
 #else
     // old input sys if we do decide to have it (most likely wont)...
 #endif
@@ -109,6 +112,8 @@ public class StarterAssetsInputs : MonoBehaviour
 
     public void PauseInput(bool newPauseState)
     {
+
+        pause = newPauseState;
         // Toggle the pause state if the input was activated.
         if (newPauseState)
             isPaused = !isPaused;
