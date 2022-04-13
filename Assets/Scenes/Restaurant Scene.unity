@@ -10021,7 +10021,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 64b4e4056c50ed047b517ea9d77614a5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  RoundLength: 180
+  RoundLength: 600
   _paused: 0
 --- !u!114 &944408407
 MonoBehaviour:
@@ -12293,8 +12293,8 @@ MonoBehaviour:
   OrderPrefab: {fileID: 6313276549371025, guid: e4fcc78c814277347bb9a3540a22ec0e, type: 3}
   MaxRunningOrders: 3
   OrdersPerDay: 10
-  OrderCooldown: 20
-  BaseOrderTimeLimit: 30
+  OrderCooldown: 30
+  BaseOrderTimeLimit: 60
   DefaultOrderPrice: 100
   Dishes:
   - Eggy Toast

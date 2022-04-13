@@ -32,10 +32,10 @@ public class OrderList : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        // TODO: generate an inverse dictionary on round start based on the dish list
-        // from which to retrieve recipes
-        _cooldown = OrderCooldown;
         _hudManager = GameObject.Find("HUD").GetComponent<HUDManager>();
+        // add a random delay before the first order shows up
+        _cooldown = (float) Random.Range(0, 5);
+        RefreshOrderList();
     }
 
     // Update is called once per frame
@@ -84,7 +84,7 @@ public class OrderList : MonoBehaviour
         newCountdown.Length = BaseOrderTimeLimit;
         newOrderObject.name = "Order";
 
-        print("New order: " + newOrder.RequestedItem + " for " + newOrder.Price + " gold!");
+        // print("New order: " + newOrder.RequestedItem + " for " + newOrder.Price + " gold!");
         Orders.Add(newOrder);
         RefreshOrderList();
     }
