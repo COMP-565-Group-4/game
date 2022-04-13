@@ -15,7 +15,12 @@ public class RecipeBook : MonoBehaviour
             // {new List<string> {"Item1", "Item2", "Item3"}, "Result"},
             // try to put them in alphabetical order, i'm probably gonna do a thing later that
             // relies on it
-            { new List<string> { "Cylinder", "Sphere" }, "Capsule" } // dummy data
+            // { new List<string> { "Cylinder", "Sphere" }, "Capsule" } // dummy data
+            { new List<string> { "Bread", "Egg" }, "Eggy Toast" },
+            { new List<string> { "Bread", "Orange" }, "Orange French Toast" },
+            { new List<string> { "Bread", "Egg", "Olive" }, "Olive French Toast" },
+            { new List<string> { "Bread", "Cherry", "Egg", "Tomato" }, "Cherry Tomato Toast" },
+
         };
     }
 }

@@ -128,6 +128,8 @@ public class FirstPersonController : MonoBehaviour
             Hover();
             Interact();
             Grab();
+
+            NextOrder();
         }
     }
 
@@ -310,6 +312,15 @@ public class FirstPersonController : MonoBehaviour
 
             _input.pause = false;
         }
+    }
+
+    private void NextOrder()
+    {
+        if (_input.showNextOrder) {
+            GameObject.Find("OrderList").SendMessage("CycleActiveOrder");
+        }
+
+        _input.showNextOrder = false;
     }
 
     private void DoRaycast()
