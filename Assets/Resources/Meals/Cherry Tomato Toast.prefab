@@ -94,7 +94,7 @@ GameObject:
   - component: {fileID: 4659451866899284296}
   - component: {fileID: 6976888426443292501}
   m_Layer: 0
-  m_Name: Cherry Tomato French Toast
+  m_Name: Cherry Tomato Toast
   m_TagString: Holdable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

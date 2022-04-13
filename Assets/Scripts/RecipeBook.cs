@@ -19,8 +19,7 @@ public class RecipeBook : MonoBehaviour
             { new List<string> { "Bread", "Egg" }, "Eggy Toast" },
             { new List<string> { "Bread", "Orange" }, "Orange French Toast" },
             { new List<string> { "Bread", "Egg", "Olive" }, "Olive French Toast" },
-            { new List<string> { "Bread", "Cherry", "Egg", "Tomato" },
-              "Cherry Tomato French Toast" },
+            { new List<string> { "Bread", "Cherry", "Egg", "Tomato" }, "Cherry Tomato Toast" },
 
         };
     }
