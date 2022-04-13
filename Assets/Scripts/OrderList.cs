@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class OrderList : MonoBehaviour
 {
@@ -20,7 +21,7 @@ public class OrderList : MonoBehaviour
     public int DefaultOrderPrice = 100;
 
     [Tooltip("The list of requested dishes for each round")]
-    public string[] Dishes = { "Capsule" };
+    public string[] Dishes = {}; // todo: change this to GameObject list maybe?
 
     private float _cooldown;
 
@@ -40,9 +41,15 @@ public class OrderList : MonoBehaviour
             // decrement order cooldown
             _cooldown = _cooldown - Time.deltaTime;
         } else {
-            // generate a new order and reset the timer
-            GenerateOrder();
-            _cooldown = OrderCooldown;
+            // check: are we under the concurrent orders limit?
+            if (Orders.Count < MaxRunningOrders) {
+                // generate a new order and reset the timer
+                GenerateOrder();
+                _cooldown = OrderCooldown;
+            } else {
+                // add a random amount of extra time until we try again
+                _cooldown = _cooldown + (float) Random.Range(0, 5);
+            }
         }
 
         // update/render order list
@@ -59,9 +66,10 @@ public class OrderList : MonoBehaviour
         Countdown newCountdown = newOrderObject.GetComponent<Countdown>();
 
         // define the order's attributes (countdown, price, requested item, etc.)
-        // newOrder.Recipe = ????
         newOrder.Price = DefaultOrderPrice;
         newOrder.RequestedItem = Dishes[index];
+        newOrder.Recipe =
+            RecipeBook.Recipes.FirstOrDefault(x => x.Value == newOrder.RequestedItem).Key;
         newCountdown.Length = BaseOrderTimeLimit;
         newOrderObject.name = "Order";
 
