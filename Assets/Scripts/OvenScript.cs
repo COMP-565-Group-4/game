@@ -9,7 +9,6 @@ public class OvenScript : MonoBehaviour
     private List<string> _recipe;
     private GameObject _output;
 
-    // Start is called before the first frame update
     void Start()
     {
         // initialize empty, idle oven
@@ -17,9 +16,6 @@ public class OvenScript : MonoBehaviour
         _input = new List<GameObject>();
         _recipe = new List<string>();
     }
-
-    // Update is called once per frame
-    void Update() { }
 
     void Interaction()
     {

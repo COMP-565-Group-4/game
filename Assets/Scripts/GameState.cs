@@ -13,7 +13,6 @@ public class GameState : MonoBehaviour
     private static GameObject _pauseMenu;
     private static HUDManager _hudManager;
 
-    // Start is called before the first frame update
     void Start()
     {
         _hud = GameObject.Find("HUD");
@@ -26,9 +25,6 @@ public class GameState : MonoBehaviour
         _hudManager.Round = (uint) CurrentRound;
         _hudManager.TotalRounds = TotalRounds;
     }
-
-    // Update is called once per frame
-    void Update() { }
 
     public static void Pause()
     {

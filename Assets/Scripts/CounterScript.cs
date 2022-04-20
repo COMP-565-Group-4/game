@@ -4,14 +4,10 @@ public class CounterScript : MonoBehaviour
 {
     public GameObject OrderList;
 
-    // Start is called before the first frame update
     void Start()
     {
         OrderList = GameObject.Find("OrderList");
     }
-
-    // Update is called once per frame
-    void Update() { }
 
     void Insert()
     {
