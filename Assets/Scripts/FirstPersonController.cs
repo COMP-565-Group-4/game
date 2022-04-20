@@ -1,3 +1,5 @@
+using InputSystem;
+
 using UnityEngine;
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
 using UnityEngine.InputSystem;
@@ -85,7 +87,7 @@ public class FirstPersonController : MonoBehaviour
 
     private PlayerInput _playerInput;
     private CharacterController _controller;
-    private StarterAssetsInputs _input;
+    private MovementInputHandler _input;
     private GameObject _mainCamera;
 
     private Camera _cam;
@@ -106,7 +108,7 @@ public class FirstPersonController : MonoBehaviour
     private void Start()
     {
         _controller = GetComponent<CharacterController>();
-        _input = GetComponent<StarterAssetsInputs>();
+        _input = GetComponent<MovementInputHandler>();
         _playerInput = GetComponent<PlayerInput>();
 
         _cam = _mainCamera.GetComponent<Camera>();
