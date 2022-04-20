@@ -1,7 +1,5 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
-#if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
-#endif
 
 namespace InputSystem {
 public class MovementInputHandler : MonoBehaviour
@@ -15,13 +13,10 @@ public class MovementInputHandler : MonoBehaviour
     [Header("Movement Settings")]
     public bool analogMovement;
 
-#if !UNITY_IOS || !UNITY_ANDROID
     [Header("Mouse Cursor Settings")]
     public bool cursorLocked = true;
     public bool cursorInputForLook = true;
-#endif
 
-#if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
     public void MoveEventHandler(InputAction.CallbackContext context)
     {
         move = context.ReadValue<Vector2>();
@@ -45,12 +40,6 @@ public class MovementInputHandler : MonoBehaviour
         sprint = context.ReadValueAsButton();
     }
 
-#else
-    // old input sys if we do decide to have it (most likely wont)...
-#endif
-
-#if !UNITY_IOS || !UNITY_ANDROID
-
     private void OnApplicationFocus(bool hasFocus)
     {
         SetCursorState(cursorLocked);
@@ -60,8 +49,5 @@ public class MovementInputHandler : MonoBehaviour
     {
         Cursor.lockState = newState ? CursorLockMode.Locked : CursorLockMode.None;
     }
-
-#endif
 }
-
 }
