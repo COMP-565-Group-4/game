@@ -1,8 +1,6 @@
 // This script is designed to be used with the QuickOutline asset.
 // Make sure there's an Outline script on the same object!
 
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class OutlineHoverScript : MonoBehaviour
