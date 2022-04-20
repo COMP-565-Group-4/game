@@ -12,14 +12,6 @@ public class StarterAssetsInputs : MonoBehaviour
     public bool jump;
     public bool sprint;
 
-    // custom input values
-    public bool interact;
-    public bool grab;
-    public bool pause;
-  
-    public bool isPaused; // having two variables is weird but we'll just leave it
-    public bool showNextOrder;
-
     [Header("Movement Settings")]
     public bool analogMovement;
 
@@ -30,99 +22,32 @@ public class StarterAssetsInputs : MonoBehaviour
 #endif
 
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
-    public void OnMove(InputValue value)
+    public void MoveEventHandler(InputAction.CallbackContext context)
     {
-        MoveInput(value.Get<Vector2>());
+        move = context.ReadValue<Vector2>();
     }
 
-    public void OnLook(InputValue value)
+    public void LookEventHandler(InputAction.CallbackContext context)
     {
-        if (cursorInputForLook) {
-            LookInput(value.Get<Vector2>());
+        if (cursorInputForLook)
+        {
+            look = context.ReadValue<Vector2>();
         }
     }
 
-    public void OnJump(InputValue value)
+    public void JumpEventHandler(InputAction.CallbackContext context)
     {
-        JumpInput(value.isPressed);
+        jump = context.ReadValueAsButton();
     }
 
-    public void OnSprint(InputValue value)
+    public void SprintEventHandler(InputAction.CallbackContext context)
     {
-        SprintInput(value.isPressed);
-    }
-
-    // custom inputs below
-
-    public void OnInteract(InputValue value)
-    {
-        InteractInput(value.isPressed);
-    }
-
-    public void OnGrab(InputValue value)
-    {
-        GrabInput(value.isPressed);
-    }
-
-    public void OnPause(InputValue value)
-    {
-        PauseInput(value.isPressed);
-    }
-
-    public void OnNextOrder(InputValue value)
-    {
-        NextOrderInput(value.isPressed);
+        sprint = context.ReadValueAsButton();
     }
 
 #else
     // old input sys if we do decide to have it (most likely wont)...
 #endif
-
-    public void MoveInput(Vector2 newMoveDirection)
-    {
-        move = newMoveDirection;
-    }
-
-    public void LookInput(Vector2 newLookDirection)
-    {
-        look = newLookDirection;
-    }
-
-    public void JumpInput(bool newJumpState)
-    {
-        jump = newJumpState;
-    }
-
-    public void SprintInput(bool newSprintState)
-    {
-        sprint = newSprintState;
-    }
-
-    // custom inputs below
-
-    public void InteractInput(bool newInteractState)
-    {
-        interact = newInteractState;
-    }
-
-    public void GrabInput(bool newGrabState)
-    {
-        grab = newGrabState;
-    }
-
-    public void PauseInput(bool newPauseState)
-    {
-
-        pause = newPauseState;
-        // Toggle the pause state if the input was activated.
-        if (newPauseState)
-            isPaused = !isPaused;
-    }
-
-    public void NextOrderInput(bool newNextOrderState)
-    {
-        showNextOrder = newNextOrderState;
-    }
 
 #if !UNITY_IOS || !UNITY_ANDROID
 

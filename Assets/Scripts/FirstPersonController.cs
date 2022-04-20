@@ -118,7 +118,6 @@ public class FirstPersonController : MonoBehaviour
 
     private void Update()
     {
-        Pause();
         if (!GameState.GamePaused) {
             JumpAndGravity();
             GroundedCheck();
@@ -126,10 +125,6 @@ public class FirstPersonController : MonoBehaviour
 
             DoRaycast();
             Hover();
-            Interact();
-            Grab();
-
-            NextOrder();
         }
     }
 
@@ -301,26 +296,24 @@ public class FirstPersonController : MonoBehaviour
 
     // custom control behaviors below
 
-    private void Pause()
+    public void PauseEventHandler(InputAction.CallbackContext context)
     {
-        if (_input.pause) {
-            if (!GameState.GamePaused) {
-                GameState.Pause();
-            } else {
-                GameState.Resume();
-            }
+        if (!context.performed)
+            return;
 
-            _input.pause = false;
+        if (!GameState.GamePaused) {
+            GameState.Pause();
+        } else {
+            GameState.Resume();
         }
     }
 
-    private void NextOrder()
+    public void NextOrderEventHandler(InputAction.CallbackContext context)
     {
-        if (_input.showNextOrder) {
-            GameObject.Find("OrderList").SendMessage("CycleActiveOrder");
-        }
+        if (!context.performed)
+            return;
 
-        _input.showNextOrder = false;
+        GameObject.Find("OrderList").SendMessage("CycleActiveOrder");
     }
 
     private void DoRaycast()
@@ -338,66 +331,62 @@ public class FirstPersonController : MonoBehaviour
         }
     }
 
-    private void Interact()
+    public void InteractEventHandler(InputAction.CallbackContext context)
     {
-        if (_input.interact) {
-            RaycastHit hit;
-            if (Physics.Raycast(_ray, out hit, InteractDistance)) {
-                print("I'm looking at " + hit.transform.name);
-                // here we'd check for the "Interactable" tag, but that'd get in the way of the
-                // other tags so let's not bother
-                hit.transform.SendMessage(
-                    "Interaction", SendMessageOptions.DontRequireReceiver
-                ); // fire off the method that makes the object do its thing
-            } else {
-                print("I'm looking at nothing!");
-            }
+        if (!context.performed)
+            return;
 
-            _input.interact = false;
+        RaycastHit hit;
+        if (Physics.Raycast(_ray, out hit, InteractDistance)) {
+            print("I'm looking at " + hit.transform.name);
+            // here we'd check for the "Interactable" tag, but that'd get in the way of the
+            // other tags so let's not bother
+            hit.transform.SendMessage(
+                "Interaction", SendMessageOptions.DontRequireReceiver
+            ); // fire off the method that makes the object do its thing
+        } else {
+            print("I'm looking at nothing!");
         }
     }
 
-    private void Grab()
+    public void GrabEventHandler(InputAction.CallbackContext context)
     {
-        if (_input.grab) // player pushes the button
+        if (!context.performed)
+            return;
+
+        RaycastHit hit;
+        if (Physics.Raycast(_ray, out hit, GrabDistance)) // we hit an object
         {
-            RaycastHit hit;
-            if (Physics.Raycast(_ray, out hit, GrabDistance)) // we hit an object
+            if (hit.transform.tag == "Holdable") // object is flagged as holdable
             {
-                if (hit.transform.tag == "Holdable") // object is flagged as holdable
+                if (Inventory.HeldItem == null) // we aren't holding anything
                 {
-                    if (Inventory.HeldItem == null) // we aren't holding anything
-                    {
-                        // pick up object
+                    // pick up object
+                    Inventory.AddItem(hit.transform.gameObject);
+                } else {
+                    if (SwapItems == true) {
+                        GameObject oldItem = Inventory.RemoveItem();
+                        oldItem.transform.position = hit.transform.gameObject.transform.position;
+                        oldItem.SetActive(true);
                         Inventory.AddItem(hit.transform.gameObject);
                     } else {
-                        if (SwapItems == true) {
-                            GameObject oldItem = Inventory.RemoveItem();
-                            oldItem.transform.position =
-                                hit.transform.gameObject.transform.position;
-                            oldItem.SetActive(true);
-                            Inventory.AddItem(hit.transform.gameObject);
-                        } else {
-                            print(
-                                "Cannot pick up " + hit.transform.name + ", currently holding a "
-                                + Inventory.HeldItem.name
-                            );
-                        }
+                        print(
+                            "Cannot pick up " + hit.transform.name + ", currently holding a "
+                            + Inventory.HeldItem.name
+                        );
                     }
-                } else if (hit.transform.tag == "Container") {
-                    if (Inventory.HeldItem == null) {
-                        hit.transform.SendMessage("Extract");
-                    } else {
-                        hit.transform.SendMessage("Insert");
-                    }
+                }
+            } else if (hit.transform.tag == "Container") {
+                if (Inventory.HeldItem == null) {
+                    hit.transform.SendMessage("Extract");
                 } else {
-                    print(hit.transform.name + " is not grabbable.");
+                    hit.transform.SendMessage("Insert");
                 }
             } else {
-                print("I'm reaching for nothing!");
+                print(hit.transform.name + " is not grabbable.");
             }
-
-            _input.grab = false;
+        } else {
+            print("I'm reaching for nothing!");
         }
     }
 }
