@@ -7,5 +7,17 @@ public class UIController : MonoBehaviour
     public GameObject hud;
     public GameObject pauseMenu;
     public GameObject startMenu;
+
+    public void PauseEventHandler()
+    {
+        pauseMenu.SetActive(true);
+        Cursor.lockState = CursorLockMode.Confined;
+    }
+
+    public void ResumeEventHandler()
+    {
+        pauseMenu.SetActive(false);
+        Cursor.lockState = CursorLockMode.Locked;
+    }
 }
 }

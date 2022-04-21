@@ -1,6 +1,7 @@
 using UnityEngine;
 using UI;
 
+using UnityEngine.Events;
 using UnityEngine.InputSystem;
 
 public class GameState : MonoBehaviour
@@ -11,17 +12,14 @@ public class GameState : MonoBehaviour
     public static int LastRoundMoney = 0;
     public static bool GamePaused = false;
 
-    private static GameObject _hud;
-    private static GameObject _pauseMenu;
     private static HUDManager _hudManager;
+
+    public UnityEvent pauseEvent;
+    public UnityEvent resumeEvent;
 
     void Start()
     {
-        _hud = GameObject.Find("HUD");
-        _pauseMenu = GameObject.Find("PauseMenu");
-
-        _hudManager = _hud.GetComponent<HUDManager>();
-        _pauseMenu.SetActive(false);
+        _hudManager = GameObject.Find("HUD").GetComponent<HUDManager>();
         StartRound();
 
         _hudManager.Round = (uint) CurrentRound;
@@ -40,24 +38,18 @@ public class GameState : MonoBehaviour
         }
     }
 
-    public static void Pause()
+    private void Pause()
     {
         GamePaused = true;
         Time.timeScale = 0f;
-        // hide HUD
-        _hud.SetActive(false);
-        // activate pause UI
-        _pauseMenu.SetActive(true);
+        pauseEvent.Invoke();
     }
 
-    public static void Resume()
+    private void Resume()
     {
         GamePaused = false;
         Time.timeScale = 1.0f;
-        // deactivate pause UI
-        _pauseMenu.SetActive(false);
-        // show HUD
-        _hud.SetActive(true);
+        resumeEvent.Invoke();
     }
 
     public static void AddMoney(int value)
