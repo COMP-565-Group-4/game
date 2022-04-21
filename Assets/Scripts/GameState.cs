@@ -1,7 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UI;
+
+using UnityEngine.Events;
+using UnityEngine.InputSystem;
 
 public class GameState : MonoBehaviour
 {
@@ -11,45 +12,44 @@ public class GameState : MonoBehaviour
     public static int LastRoundMoney = 0;
     public static bool GamePaused = false;
 
-    private static GameObject _hud;
-    private static GameObject _pauseMenu;
     private static HUDManager _hudManager;
 
-    // Start is called before the first frame update
+    public UnityEvent pauseEvent;
+    public UnityEvent resumeEvent;
+
     void Start()
     {
-        _hud = GameObject.Find("HUD");
-        _pauseMenu = GameObject.Find("PauseMenu");
-
-        _hudManager = _hud.GetComponent<HUDManager>();
-        _pauseMenu.SetActive(false);
+        _hudManager = GameObject.Find("HUD").GetComponent<HUDManager>();
         StartRound();
 
         _hudManager.Round = (uint) CurrentRound;
         _hudManager.TotalRounds = TotalRounds;
     }
 
-    // Update is called once per frame
-    void Update() { }
+    public void PauseEventHandler(InputAction.CallbackContext context)
+    {
+        if (!context.performed)
+            return;
 
-    public static void Pause()
+        if (!GamePaused) {
+            Pause();
+        } else {
+            Resume();
+        }
+    }
+
+    private void Pause()
     {
         GamePaused = true;
         Time.timeScale = 0f;
-        // hide HUD
-        _hud.SetActive(false);
-        // activate pause UI
-        _pauseMenu.SetActive(true);
+        pauseEvent.Invoke();
     }
 
-    public static void Resume()
+    private void Resume()
     {
         GamePaused = false;
         Time.timeScale = 1.0f;
-        // deactivate pause UI
-        _pauseMenu.SetActive(false);
-        // show HUD
-        _hud.SetActive(true);
+        resumeEvent.Invoke();
     }
 
     public static void AddMoney(int value)

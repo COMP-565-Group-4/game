@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -10,14 +9,10 @@ public class Order : MonoBehaviour
 
     private OrderList _orderList; // the current level's OrderList
 
-    // Start is called before the first frame update
     void Start()
     {
         _orderList = GameObject.Find("OrderList").GetComponent<OrderList>();
     }
-
-    // Update is called once per frame
-    void Update() { }
 
     void Complete()
     {

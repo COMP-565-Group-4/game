@@ -1,8 +1,9 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using UI;
+
+using UnityEngine.InputSystem;
 
 public class OrderList : MonoBehaviour
 {
@@ -58,6 +59,14 @@ public class OrderList : MonoBehaviour
         }
 
         // update/render order list
+    }
+
+    public void NextOrderEventHandler(InputAction.CallbackContext context)
+    {
+        if (!context.performed)
+            return;
+
+        CycleActiveOrder();
     }
 
     void GenerateOrder()

@@ -1,66 +1,15 @@
-using UnityEngine;
-#if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
-using UnityEngine.InputSystem;
-#endif
+using InputSystem;
 
-namespace StarterAssets {
+using ScriptableObjects;
+
+using UnityEngine;
+using UnityEngine.InputSystem;
+
 [RequireComponent(typeof(CharacterController))]
-#if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
 [RequireComponent(typeof(PlayerInput))]
-#endif
 public class FirstPersonController : MonoBehaviour
 {
-    [Header("Player")]
-    [Tooltip("Move speed of the character in m/s")]
-    public float MoveSpeed = 4.0f;
-    [Tooltip("Sprint speed of the character in m/s")]
-    public float SprintSpeed = 6.0f;
-    [Tooltip("Rotation speed of the character")]
-    public float RotationSpeed = 1.0f;
-    [Tooltip("Acceleration and deceleration")]
-    public float SpeedChangeRate = 10.0f;
-
-    [Space(10)]
-    [Tooltip("The height the player can jump")]
-    public float JumpHeight = 1.2f;
-    [Tooltip("The character uses its own gravity value. The engine default is -9.81f")]
-    public float Gravity = -15.0f;
-
-    [Space(10)]
-    [Tooltip(
-        "Time required to pass before being able to jump again. Set to 0f to instantly jump again"
-    )]
-    public float JumpTimeout = 0.1f;
-    [Tooltip("Time required to pass before entering the fall state. Useful for walking down stairs"
-    )]
-    public float FallTimeout = 0.15f;
-
-    [Space(10)]
-    [Tooltip("Maximum distance from which the player can interact with an object")]
-    public float InteractDistance = 2;
-    [Tooltip("Maximum distance from which the player can grab an object")]
-    public float GrabDistance = 2;
-    [Tooltip(
-        "Maximum distance from which the player can hover their mouse over an interactable object"
-    )]
-    public float HoverDistance = 2;
-
-    [Header("Player Items")]
-    [Tooltip("Whether the player can swap items.")]
-    public bool SwapItems = true;
-
-    [Header("Player Grounded")]
-    [Tooltip(
-        "If the character is grounded or not. Not part of the CharacterController built in grounded check"
-    )]
-    public bool Grounded = true;
-    [Tooltip("Useful for rough ground")]
-    public float GroundedOffset = -0.14f;
-    [Tooltip("The radius of the grounded check. Should match the radius of the CharacterController"
-    )]
-    public float GroundedRadius = 0.5f;
-    [Tooltip("What layers the character uses as ground")]
-    public LayerMask GroundLayers;
+    public PlayerData data;
 
     [Header("Cinemachine")]
     [Tooltip("The follow target set in the Cinemachine Virtual Camera that the camera will follow")]
@@ -85,7 +34,7 @@ public class FirstPersonController : MonoBehaviour
 
     private PlayerInput _playerInput;
     private CharacterController _controller;
-    private StarterAssetsInputs _input;
+    private MovementInputHandler _input;
     private GameObject _mainCamera;
 
     private Camera _cam;
@@ -106,19 +55,18 @@ public class FirstPersonController : MonoBehaviour
     private void Start()
     {
         _controller = GetComponent<CharacterController>();
-        _input = GetComponent<StarterAssetsInputs>();
+        _input = GetComponent<MovementInputHandler>();
         _playerInput = GetComponent<PlayerInput>();
 
         _cam = _mainCamera.GetComponent<Camera>();
 
         // reset our timeouts on start
-        _jumpTimeoutDelta = JumpTimeout;
-        _fallTimeoutDelta = FallTimeout;
+        _jumpTimeoutDelta = data.JumpTimeout;
+        _fallTimeoutDelta = data.FallTimeout;
     }
 
     private void Update()
     {
-        Pause();
         if (!GameState.GamePaused) {
             JumpAndGravity();
             GroundedCheck();
@@ -126,10 +74,6 @@ public class FirstPersonController : MonoBehaviour
 
             DoRaycast();
             Hover();
-            Interact();
-            Grab();
-
-            NextOrder();
         }
     }
 
@@ -144,10 +88,10 @@ public class FirstPersonController : MonoBehaviour
     {
         // set sphere position, with offset
         Vector3 spherePosition = new Vector3(
-            transform.position.x, transform.position.y - GroundedOffset, transform.position.z
+            transform.position.x, transform.position.y - data.GroundedOffset, transform.position.z
         );
-        Grounded = Physics.CheckSphere(
-            spherePosition, GroundedRadius, GroundLayers, QueryTriggerInteraction.Ignore
+        data.Grounded = Physics.CheckSphere(
+            spherePosition, data.GroundedRadius, data.GroundLayers, QueryTriggerInteraction.Ignore
         );
     }
 
@@ -158,8 +102,8 @@ public class FirstPersonController : MonoBehaviour
             // Don't multiply mouse input by Time.deltaTime
             float deltaTimeMultiplier = IsCurrentDeviceMouse ? 1.0f : Time.deltaTime;
 
-            _cinemachineTargetPitch += _input.look.y * RotationSpeed * deltaTimeMultiplier;
-            _rotationVelocity = _input.look.x * RotationSpeed * deltaTimeMultiplier;
+            _cinemachineTargetPitch += _input.look.y * data.RotationSpeed * deltaTimeMultiplier;
+            _rotationVelocity = _input.look.x * data.RotationSpeed * deltaTimeMultiplier;
 
             // clamp our pitch rotation
             _cinemachineTargetPitch = ClampAngle(_cinemachineTargetPitch, BottomClamp, TopClamp);
@@ -176,7 +120,7 @@ public class FirstPersonController : MonoBehaviour
     private void Move()
     {
         // set target speed based on move speed, sprint speed and if sprint is pressed
-        float targetSpeed = _input.sprint ? SprintSpeed : MoveSpeed;
+        float targetSpeed = _input.sprint ? data.SprintSpeed : data.MoveSpeed;
 
         // a simplistic acceleration and deceleration designed to be easy to remove, replace, or
         // iterate upon
@@ -202,7 +146,7 @@ public class FirstPersonController : MonoBehaviour
             _speed = Mathf.Lerp(
                 currentHorizontalSpeed,
                 targetSpeed * inputMagnitude,
-                Time.deltaTime * SpeedChangeRate
+                Time.deltaTime * data.SpeedChangeRate
             );
 
             // round speed to 3 decimal places
@@ -231,9 +175,9 @@ public class FirstPersonController : MonoBehaviour
 
     private void JumpAndGravity()
     {
-        if (Grounded) {
+        if (data.Grounded) {
             // reset the fall timeout timer
-            _fallTimeoutDelta = FallTimeout;
+            _fallTimeoutDelta = data.FallTimeout;
 
             // stop our velocity dropping infinitely when grounded
             if (_verticalVelocity < 0.0f) {
@@ -243,7 +187,7 @@ public class FirstPersonController : MonoBehaviour
             // Jump
             if (_input.jump && _jumpTimeoutDelta <= 0.0f) {
                 // the square root of H * -2 * G = how much velocity needed to reach desired height
-                _verticalVelocity = Mathf.Sqrt(JumpHeight * -2f * Gravity);
+                _verticalVelocity = Mathf.Sqrt(data.JumpHeight * -2f * data.Gravity);
             }
 
             // jump timeout
@@ -252,7 +196,7 @@ public class FirstPersonController : MonoBehaviour
             }
         } else {
             // reset the jump timeout timer
-            _jumpTimeoutDelta = JumpTimeout;
+            _jumpTimeoutDelta = data.JumpTimeout;
 
             // fall timeout
             if (_fallTimeoutDelta >= 0.0f) {
@@ -266,7 +210,7 @@ public class FirstPersonController : MonoBehaviour
         // apply gravity over time if under terminal (multiply by delta time twice to linearly speed
         // up over time)
         if (_verticalVelocity < _terminalVelocity) {
-            _verticalVelocity += Gravity * Time.deltaTime;
+            _verticalVelocity += data.Gravity * Time.deltaTime;
         }
     }
 
@@ -284,7 +228,7 @@ public class FirstPersonController : MonoBehaviour
         Color transparentGreen = new Color(0.0f, 1.0f, 0.0f, 0.35f);
         Color transparentRed = new Color(1.0f, 0.0f, 0.0f, 0.35f);
 
-        if (Grounded)
+        if (data.Grounded)
             Gizmos.color = transparentGreen;
         else
             Gizmos.color = transparentRed;
@@ -293,35 +237,15 @@ public class FirstPersonController : MonoBehaviour
         // collider
         Gizmos.DrawSphere(
             new Vector3(
-                transform.position.x, transform.position.y - GroundedOffset, transform.position.z
+                transform.position.x,
+                transform.position.y - data.GroundedOffset,
+                transform.position.z
             ),
-            GroundedRadius
+            data.GroundedRadius
         );
     }
 
     // custom control behaviors below
-
-    private void Pause()
-    {
-        if (_input.pause) {
-            if (!GameState.GamePaused) {
-                GameState.Pause();
-            } else {
-                GameState.Resume();
-            }
-
-            _input.pause = false;
-        }
-    }
-
-    private void NextOrder()
-    {
-        if (_input.showNextOrder) {
-            GameObject.Find("OrderList").SendMessage("CycleActiveOrder");
-        }
-
-        _input.showNextOrder = false;
-    }
 
     private void DoRaycast()
     {
@@ -331,74 +255,10 @@ public class FirstPersonController : MonoBehaviour
     private void Hover()
     {
         RaycastHit hit;
-        if (Physics.Raycast(_ray, out hit, HoverDistance)) {
+        if (Physics.Raycast(_ray, out hit, data.HoverDistance)) {
             if (hit.transform.GetComponent<MonoBehaviour>() != null) {
                 hit.transform.SendMessage("OnHover", SendMessageOptions.DontRequireReceiver);
             }
         }
     }
-
-    private void Interact()
-    {
-        if (_input.interact) {
-            RaycastHit hit;
-            if (Physics.Raycast(_ray, out hit, InteractDistance)) {
-                print("I'm looking at " + hit.transform.name);
-                // here we'd check for the "Interactable" tag, but that'd get in the way of the
-                // other tags so let's not bother
-                hit.transform.SendMessage(
-                    "Interaction", SendMessageOptions.DontRequireReceiver
-                ); // fire off the method that makes the object do its thing
-            } else {
-                print("I'm looking at nothing!");
-            }
-
-            _input.interact = false;
-        }
-    }
-
-    private void Grab()
-    {
-        if (_input.grab) // player pushes the button
-        {
-            RaycastHit hit;
-            if (Physics.Raycast(_ray, out hit, GrabDistance)) // we hit an object
-            {
-                if (hit.transform.tag == "Holdable") // object is flagged as holdable
-                {
-                    if (Inventory.HeldItem == null) // we aren't holding anything
-                    {
-                        // pick up object
-                        Inventory.AddItem(hit.transform.gameObject);
-                    } else {
-                        if (SwapItems == true) {
-                            GameObject oldItem = Inventory.RemoveItem();
-                            oldItem.transform.position =
-                                hit.transform.gameObject.transform.position;
-                            oldItem.SetActive(true);
-                            Inventory.AddItem(hit.transform.gameObject);
-                        } else {
-                            print(
-                                "Cannot pick up " + hit.transform.name + ", currently holding a "
-                                + Inventory.HeldItem.name
-                            );
-                        }
-                    }
-                } else if (hit.transform.tag == "Container") {
-                    if (Inventory.HeldItem == null) {
-                        hit.transform.SendMessage("Extract");
-                    } else {
-                        hit.transform.SendMessage("Insert");
-                    }
-                } else {
-                    print(hit.transform.name + " is not grabbable.");
-                }
-            } else {
-                print("I'm reaching for nothing!");
-            }
-
-            _input.grab = false;
-        }
-    }
-}
 }
