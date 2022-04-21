@@ -1,7 +1,9 @@
 using System.Collections.Generic;
+
 using UnityEngine;
 
-public class OvenScript : MonoBehaviour
+namespace Interaction.Containers {
+public sealed class Oven : Container
 {
     private bool _busy;
     private bool _containsFinishedDish;
@@ -9,7 +11,7 @@ public class OvenScript : MonoBehaviour
     private List<string> _recipe;
     private GameObject _output;
 
-    void Start()
+    private void Start()
     {
         // initialize empty, idle oven
         _busy = false;
@@ -17,26 +19,7 @@ public class OvenScript : MonoBehaviour
         _recipe = new List<string>();
     }
 
-    void Interaction()
-    {
-        Cook();
-    }
-
-    void Insert()
-    {
-        if (_containsFinishedDish) {
-            print("ERROR: Oven contains a finished dish. Remove it first!");
-        } else if (!_busy) {
-            // add inserted object to _input
-            print("Adding " + Inventory.HeldItem.name + " to container...");
-            _input.Add(Inventory.RemoveItem());
-        } else {
-            // oven is currently busy, don't let player put anything in
-            print("ERROR: Oven is busy!");
-        }
-    }
-
-    void Extract()
+    protected override void Extract()
     {
         if (_containsFinishedDish) {
             // oven is done, retrieve the finished dish from _output
@@ -56,7 +39,21 @@ public class OvenScript : MonoBehaviour
         }
     }
 
-    void Cook()
+    protected override void Insert()
+    {
+        if (_containsFinishedDish) {
+            print("ERROR: Oven contains a finished dish. Remove it first!");
+        } else if (!_busy) {
+            // add inserted object to _input
+            print("Adding " + Inventory.HeldItem.name + " to container...");
+            _input.Add(Inventory.RemoveItem());
+        } else {
+            // oven is currently busy, don't let player put anything in
+            print("ERROR: Oven is busy!");
+        }
+    }
+
+    protected override void Interact()
     {
         if (_input.Count == 0) {
             print("ERROR: No items!");
@@ -93,4 +90,5 @@ public class OvenScript : MonoBehaviour
         _input.Clear();
         _recipe.Clear();
     }
+}
 }

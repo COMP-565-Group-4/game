@@ -1,15 +1,16 @@
 using UnityEngine;
 
-public class CounterScript : MonoBehaviour
+namespace Interaction.Containers {
+public sealed class Counter : Container
 {
     public GameObject OrderList;
 
-    void Start()
+    protected override void Extract()
     {
-        OrderList = GameObject.Find("OrderList");
+        print("There's nothing on the counter.");
     }
 
-    void Insert()
+    protected override void Insert()
     {
         // retrieve the object from player's inventory
         GameObject dish = Inventory.RemoveItem();
@@ -32,8 +33,6 @@ public class CounterScript : MonoBehaviour
         }
     }
 
-    void Extract()
-    {
-        print("There's nothing on the counter.");
-    }
+    protected override void Interact() { }
+}
 }

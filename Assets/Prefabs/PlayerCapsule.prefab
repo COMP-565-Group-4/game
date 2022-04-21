@@ -340,35 +340,11 @@ MonoBehaviour:
     m_ActionId: 980e881e-182c-404c-8cbf-3d09fdb48fef
     m_ActionName: Player/Sprint[/Keyboard/leftShift,/XInputControllerWindows/leftTrigger]
   - m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 8616685848737228371}
-        m_TargetAssemblyTypeName: StarterAssets.FirstPersonController, Assembly-CSharp
-        m_MethodName: InteractEventHandler
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
     m_ActionId: b668df46-269e-4f29-a36b-7d0649a9e097
     m_ActionName: Player/Interact[/Mouse/leftButton]
   - m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 8616685848737228371}
-        m_TargetAssemblyTypeName: StarterAssets.FirstPersonController, Assembly-CSharp
-        m_MethodName: GrabEventHandler
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
     m_ActionId: 32a517fc-9a4d-403a-80a0-2d924b9d1d10
     m_ActionName: Player/Grab[/Keyboard/e]
   - m_PersistentCalls:
