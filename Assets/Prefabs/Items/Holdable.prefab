@@ -90,3 +90,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   outline: {fileID: 1847341124482483937}
+  playerData: {fileID: 11400000, guid: ac7868f5051788a4db64e49c56a6a601, type: 2}
