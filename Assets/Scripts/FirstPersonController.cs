@@ -293,26 +293,6 @@ public class FirstPersonController : MonoBehaviour
 
     // custom control behaviors below
 
-    public void PauseEventHandler(InputAction.CallbackContext context)
-    {
-        if (!context.performed)
-            return;
-
-        if (!GameState.GamePaused) {
-            GameState.Pause();
-        } else {
-            GameState.Resume();
-        }
-    }
-
-    public void NextOrderEventHandler(InputAction.CallbackContext context)
-    {
-        if (!context.performed)
-            return;
-
-        GameObject.Find("OrderList").SendMessage("CycleActiveOrder");
-    }
-
     private void DoRaycast()
     {
         _ray = _cam.ViewportPointToRay(new Vector3(0.5F, 0.5F, 0));

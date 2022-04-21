@@ -1,6 +1,8 @@
 using UnityEngine;
 using UI;
 
+using UnityEngine.InputSystem;
+
 public class GameState : MonoBehaviour
 {
     public int CurrentRound = 1;
@@ -24,6 +26,18 @@ public class GameState : MonoBehaviour
 
         _hudManager.Round = (uint) CurrentRound;
         _hudManager.TotalRounds = TotalRounds;
+    }
+
+    public void PauseEventHandler(InputAction.CallbackContext context)
+    {
+        if (!context.performed)
+            return;
+
+        if (!GamePaused) {
+            Pause();
+        } else {
+            Resume();
+        }
     }
 
     public static void Pause()

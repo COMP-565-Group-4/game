@@ -372,35 +372,11 @@ MonoBehaviour:
     m_ActionId: 32a517fc-9a4d-403a-80a0-2d924b9d1d10
     m_ActionName: Player/Grab[/Keyboard/e]
   - m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 8616685848737228371}
-        m_TargetAssemblyTypeName: StarterAssets.FirstPersonController, Assembly-CSharp
-        m_MethodName: PauseEventHandler
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
     m_ActionId: 4d9b7806-5abe-4387-a315-117161f87b48
     m_ActionName: Player/Pause[/Keyboard/escape]
   - m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 8616685848737228371}
-        m_TargetAssemblyTypeName: StarterAssets.FirstPersonController, Assembly-CSharp
-        m_MethodName: NextOrderEventHandler
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
     m_ActionId: dd698e18-4640-44a3-a5ad-1de7b3510acc
     m_ActionName: Player/Next Order[/Keyboard/tab]
   m_NeverAutoSwitchControlSchemes: 0
