@@ -985,6 +985,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 28085a9df9cfec044b536cbcca95335d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  inventory: {fileID: 11400000, guid: 8c253e946d8d9254e9b201ea8badc340, type: 2}
   TimeText: {fileID: 7229468217759181003}
   RoundText: {fileID: 7229468217196291954}
   MoneyText: {fileID: 7229468217373267280}
@@ -995,7 +996,6 @@ MonoBehaviour:
   round: 0
   totalRounds: 0
   money: 0
-  heldItem: nothing
   minutes: 0
   seconds: 0
   order: 0

@@ -1,3 +1,7 @@
+using System;
+
+using ScriptableObjects;
+
 using TMPro;
 
 using UnityEngine;
@@ -5,6 +9,8 @@ using UnityEngine;
 namespace UI {
 public class HUDManager : MonoBehaviour
 {
+    public Inventory inventory;
+
     [Header("Text")]
     [Tooltip("TMP component for the timer text")]
     public TextMeshProUGUI TimeText;
@@ -39,10 +45,6 @@ public class HUDManager : MonoBehaviour
     [SerializeField]
     [Tooltip("Amount of money the player possesses")]
     private uint money;
-
-    [SerializeField]
-    [Tooltip("Name of the currently held item")]
-    private string heldItem;
 
     [Header("Time")]
     [SerializeField]
@@ -94,15 +96,6 @@ public class HUDManager : MonoBehaviour
         set {
             money = value;
             MoneyText.text = value.ToString();
-        }
-    }
-
-    public string HeldItem
-    {
-        get => heldItem;
-        set {
-            heldItem = value;
-            HeldItemNameText.text = value;
         }
     }
 
@@ -160,16 +153,30 @@ public class HUDManager : MonoBehaviour
         }
     }
 
+    private void OnEnable()
+    {
+        inventory.itemChangedEvent.AddListener(ItemChangedEventHandler);
+    }
+
+    private void OnDisable()
+    {
+        inventory.itemChangedEvent.RemoveListener(ItemChangedEventHandler);
+    }
+
+    private void ItemChangedEventHandler(GameObject item)
+    {
+        HeldItemNameText.text = item is null ? "nothing" : item.name;
+    }
+
 #if UNITY_EDITOR
     /// <summary>
     /// Triggers setters of properties when a backing field is updated via the inspector.
     /// </summary>
-    protected void OnValidate()
+    private void OnValidate()
     {
         Round = round;
         TotalRounds = totalRounds;
         Money = money;
-        HeldItem = heldItem;
         Minutes = minutes;
         Seconds = seconds;
         Order = order;
