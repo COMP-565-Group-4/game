@@ -66,7 +66,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 6223063766105955349, guid: bb7e141659289e64a94e2383bc6b6e54, type: 3}
       propertyPath: m_Name
-      value: Stove Container Variant
+      value: Stove Container
       objectReference: {fileID: 0}
     - target: {fileID: 6223063766105955350, guid: bb7e141659289e64a94e2383bc6b6e54, type: 3}
       propertyPath: m_RootOrder
@@ -135,7 +135,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &719871743674483111
+--- !u!114 &1494628673581013479
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -144,8 +144,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 7760104677999388157}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f63fb0b862a90b84c8ddcd834e3ea860, type: 3}
+  m_Script: {fileID: 11500000, guid: af6445acf4674865856d3aa525b955f9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   outline: {fileID: 7760104677999388152}
   inventory: {fileID: 11400000, guid: 8c253e946d8d9254e9b201ea8badc340, type: 2}
+  Products:
+  - {fileID: 11400000, guid: 9e02a1a270507a043921e5a488ee6b75, type: 2}
+  - {fileID: 11400000, guid: 8a4a5e71051910b479c84381616733c7, type: 2}
+  - {fileID: 11400000, guid: bdb2fc99b8bdf3e4c867041243d2412d, type: 2}
+  - {fileID: 11400000, guid: 435e6597092479f429be73d3c0081419, type: 2}
+  - {fileID: 11400000, guid: ec4e99feb6d59d643b991e4a1e389136, type: 2}
