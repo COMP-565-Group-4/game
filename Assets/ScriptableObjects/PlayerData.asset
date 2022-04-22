@@ -22,12 +22,9 @@ MonoBehaviour:
   FallTimeout: 0.15
   HoverDistance: 2
   SwapItems: 1
-  Grounded: 1
+  Grounded: 0
   GroundedOffset: -0.14
   GroundedRadius: 0.5
   GroundLayers:
     serializedVersion: 2
-    m_Bits: 0
-  CinemachineCameraTarget: {fileID: 0}
-  TopClamp: 90
-  BottomClamp: -90
+    m_Bits: 1
