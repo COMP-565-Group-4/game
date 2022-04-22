@@ -1,9 +1,11 @@
+using ScriptableObjects;
+
 namespace Interaction {
 public abstract class Container : Interactable
 {
     protected override void Hold()
     {
-        if (Inventory.HeldItem == null) {
+        if (inventory.HeldItem == null) {
             Extract();
         } else {
             Insert();

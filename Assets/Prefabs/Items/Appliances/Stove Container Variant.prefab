@@ -66,7 +66,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 6223063766105955349, guid: bb7e141659289e64a94e2383bc6b6e54, type: 3}
       propertyPath: m_Name
-      value: Stove Container
+      value: Stove Container Variant
       objectReference: {fileID: 0}
     - target: {fileID: 6223063766105955350, guid: bb7e141659289e64a94e2383bc6b6e54, type: 3}
       propertyPath: m_RootOrder
@@ -148,3 +148,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   outline: {fileID: 7760104677999388152}
+  inventory: {fileID: 11400000, guid: 8c253e946d8d9254e9b201ea8badc340, type: 2}

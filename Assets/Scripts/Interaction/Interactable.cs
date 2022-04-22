@@ -1,11 +1,15 @@
 using System;
 
+using ScriptableObjects;
+
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 namespace Interaction {
 public abstract class Interactable : OutlineOnHover
 {
+    public Inventory inventory;
+
     private InputAction grabAction;
     private InputAction interactAction;
 

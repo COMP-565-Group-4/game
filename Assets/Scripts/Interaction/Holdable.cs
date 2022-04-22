@@ -9,20 +9,20 @@ public class Holdable : Interactable
 
     protected override void Hold()
     {
-        if (Inventory.HeldItem == null) // we aren't holding anything
+        if (inventory.HeldItem == null) // we aren't holding anything
         {
             // pick up object
-            Inventory.AddItem(transform.gameObject);
+            inventory.AddItem(transform.gameObject);
         } else {
             if (playerData.SwapItems == true) {
-                GameObject oldItem = Inventory.RemoveItem();
+                GameObject oldItem = inventory.RemoveItem();
                 oldItem.transform.position = transform.gameObject.transform.position;
                 oldItem.SetActive(true);
-                Inventory.AddItem(transform.gameObject);
+                inventory.AddItem(transform.gameObject);
             } else {
                 print(
                     "Cannot pick up " + transform.name + ", currently holding a "
-                    + Inventory.HeldItem.name
+                    + inventory.HeldItem.name
                 );
             }
         }

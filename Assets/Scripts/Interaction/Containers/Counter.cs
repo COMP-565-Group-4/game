@@ -1,3 +1,5 @@
+using ScriptableObjects;
+
 using UnityEngine;
 
 namespace Interaction.Containers {
@@ -13,7 +15,7 @@ public sealed class Counter : Container
     protected override void Insert()
     {
         // retrieve the object from player's inventory
-        GameObject dish = Inventory.RemoveItem();
+        GameObject dish = inventory.RemoveItem();
 
         // move dish to counter and display it
         dish.transform.position = transform.position;
