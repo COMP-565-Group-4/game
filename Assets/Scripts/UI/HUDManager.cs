@@ -8,6 +8,7 @@ using TMPro;
 
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 namespace UI {
 public class HUDManager : MonoBehaviour
@@ -104,6 +105,11 @@ public class HUDManager : MonoBehaviour
     private void ItemChangedEventHandler(GameObject item)
     {
         heldItemName.text = item is null ? "nothing" : item.name;
+
+        // Apparently this isn't ideal for performance, but IDK why it doesn't update on its own.
+        LayoutRebuilder.ForceRebuildLayoutImmediate(
+            heldItemName.GetComponentInParent<RectTransform>()
+        );
     }
 
     private void HandleRemovedOrder(LinkedListNode<Order> order)
