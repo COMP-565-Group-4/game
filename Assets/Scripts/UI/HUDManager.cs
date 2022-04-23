@@ -46,6 +46,12 @@ public class HUDManager : MonoBehaviour
         totalOrders = 0;
     }
 
+    public void OrderCompleteEventHandler(Order order)
+    {
+        // TODO: Avoid parsing string? But I don't want to duplicate tracking the money state...
+        MoneyText.text = (int.Parse(MoneyText.text) + order.Reward).ToString();
+    }
+
     public void OrderCreateEventHandler(Order order)
     {
         if (this.order is null) {
