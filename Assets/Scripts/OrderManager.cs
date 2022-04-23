@@ -58,9 +58,12 @@ public class OrderManager : MonoBehaviour
     {
         try {
             // TODO: A List isn't efficient for this.
-            var order = orders.First(order => order.Order.Meal == ingredient);
+            // TODO: More robust comparison than using names?
+            var order = orders.First(order => order.Order.Meal.name == ingredient.name);
             orders.Remove(order);
             OrderCompleteEvent.Invoke(order.Order, (uint) currentOrder);
+
+            Debug.Log($"Order for {order.Order.Meal.name} was completed!");
         } catch (InvalidOperationException) {
             Debug.Log("No associated order found; ignoring meal.");
         }
