@@ -35,8 +35,8 @@ public class HUDManager : MonoBehaviour
     public TextMeshProUGUI HeldItemNameText;
 
     private Order order;
-    private uint currentOrder = 0;
-    private uint totalOrders = 0;
+    private uint currentOrder;
+    private uint totalOrders;
 
     public void RoundStartEventHandler(Round round, uint number, uint total)
     {
@@ -48,37 +48,41 @@ public class HUDManager : MonoBehaviour
 
     public void OrderCreateEventHandler(Order order)
     {
-        totalOrders += 1;
         if (this.order is null) {
-            // This is the first order; display it.
-            this.order = order;
-            currentOrder = 1;
-            SetAllOrderText();
+            // No order is being displayed, so display the created order.
+            OrderNextEventHandler(order, 0, 1);
         } else {
-            // Otherwise, just make sure the total is up to date.
-            // New orders are added to the end, so the current number won't change.
-            OrderNumberText.text = $"{currentOrder}/{totalOrders}";
+            // An order is being displayed; just update the total.
+            totalOrders += 1;
+            SetOrderNumber();
         }
     }
 
-    public void OrderCompleteEventHandler(Order order, uint currentOrder)
+    public void OrderNextEventHandler(Order order, uint currentOrder, uint totalOrders)
     {
-        this.currentOrder = currentOrder + 1;
-        DecrementTotalOrders();
-    }
+        if (order is null) {
+            currentOrder = 0;
 
-    public void OrderFailureEventHandler(Order order, uint currentOrder)
-    {
-        this.currentOrder = currentOrder + 1;
-        DecrementTotalOrders();
-    }
+            if (this.order != null) {
+                OrderRecipeNameText.text = "";
+                OrderRecipeText.text = "No more orders currently available.";
+            }
+        } else {
+            ++currentOrder;
 
-    public void OrderNextEventHandler(Order order, uint currentOrder)
-    {
+            if (this.order != order) {
+                OrderRecipeNameText.text = order.Meal.name;
+                // TODO: merge identical ingredient to display a count instead e.g. "2x egg".
+                OrderRecipeText.text =
+                    string.Join("\n", order.Meal.ChildIngredients.Select(i => i.name));
+            }
+        }
+
         this.order = order;
-        this.currentOrder = currentOrder + 1;
+        this.currentOrder = currentOrder;
+        this.totalOrders = totalOrders;
 
-        SetAllOrderText();
+        SetOrderNumber();
     }
 
     private void OnEnable()
@@ -96,24 +100,9 @@ public class HUDManager : MonoBehaviour
         HeldItemNameText.text = item is null ? "nothing" : item.name;
     }
 
-    private void DecrementTotalOrders()
+    private void SetOrderNumber()
     {
-        totalOrders -= 1;
         OrderNumberText.text = $"{currentOrder}/{totalOrders}";
-
-        if (totalOrders == 0) {
-            OrderRecipeNameText.text = "";
-            OrderRecipeText.text = "No more orders currently available.";
-        }
-    }
-
-    private void SetAllOrderText()
-    {
-        OrderRecipeNameText.text = order.Meal.name;
-        OrderNumberText.text = $"{currentOrder}/{totalOrders}";
-
-        // TODO: merge identical ingredient to display a count instead e.g. "2x egg".
-        OrderRecipeText.text = string.Join("\n", order.Meal.ChildIngredients.Select(i => i.name));
     }
 }
 }

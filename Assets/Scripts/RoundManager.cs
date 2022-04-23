@@ -86,8 +86,7 @@ public class RoundManager : MonoBehaviour
     /// <see cref="Round.OrderCount"/>.
     /// </summary>
     /// <param name="order">The completed <see cref="Order"/>.</param>
-    /// <param name="currentOrder">The currently displayed order's number.</param>
-    public void OrderCompleteEventHandler(Order order, uint currentOrder)
+    public void OrderCompleteEventHandler(Order order)
     {
         completedOrders += 1;
 

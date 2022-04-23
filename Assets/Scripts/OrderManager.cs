@@ -27,9 +27,9 @@ public class OrderData
 public class OrderManager : MonoBehaviour
 {
     public UnityEvent<Order> OrderCreateEvent;
-    public UnityEvent<Order, uint> OrderCompleteEvent;
-    public UnityEvent<Order, uint> OrderFailureEvent;
-    public UnityEvent<Order, uint> OrderNextEvent;
+    public UnityEvent<Order> OrderCompleteEvent;
+    public UnityEvent<Order> OrderFailureEvent;
+    public UnityEvent<Order, uint, uint> OrderNextEvent;
 
     private Round round;
     private List<OrderData> orders = new List<OrderData>();
@@ -61,7 +61,9 @@ public class OrderManager : MonoBehaviour
             // TODO: More robust comparison than using names?
             var order = orders.First(order => order.Order.Meal.name == ingredient.name);
             orders.Remove(order);
-            OrderCompleteEvent.Invoke(order.Order, (uint) currentOrder);
+
+            OrderCompleteEvent.Invoke(order.Order);
+            NextOrder();
 
             Debug.Log($"Order for {order.Order.Meal.name} was completed!");
         } catch (InvalidOperationException) {
@@ -96,16 +98,29 @@ public class OrderManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Cycles the current order to display and invokes <see cref="OrderNextEvent"/>.
+    /// Cycles the current order when the corresponding input is given.
     /// </summary>
     /// <param name="context">The context of the triggered action.</param>
     public void NextOrderInputEventHandler(InputAction.CallbackContext context)
     {
-        if (!context.performed)
-            return;
+        if (context.performed)
+            NextOrder();
+    }
 
-        currentOrder = (currentOrder + 1) % orders.Count;
-        OrderNextEvent.Invoke(orders[currentOrder].Order, (uint) currentOrder);
+    /// <summary>
+    /// Cycles the current order to display and invokes <see cref="OrderNextEvent"/>.
+    /// </summary>
+    private void NextOrder()
+    {
+        if (orders.Count == 0) {
+            currentOrder = 0;
+            OrderNextEvent.Invoke(null, 0, 0);
+        } else {
+            currentOrder = (currentOrder + 1) % orders.Count;
+            OrderNextEvent.Invoke(
+                orders[currentOrder].Order, (uint) currentOrder, (uint) orders.Count
+            );
+        }
     }
 
     /// <summary>
@@ -125,7 +140,8 @@ public class OrderManager : MonoBehaviour
 
             if (order.Time <= 0) {
                 failures.Add(order);
-                OrderFailureEvent.Invoke(order.Order, (uint) currentOrder);
+                OrderFailureEvent.Invoke(order.Order);
+                NextOrder();
             }
         }
 
@@ -147,6 +163,7 @@ public class OrderManager : MonoBehaviour
             var order = round.Orders[Random.Range(0, round.Orders.Length)];
             orders.Add(new OrderData(order));
             newOrderDelta = 0;
+
             OrderCreateEvent.Invoke(order);
 
             Debug.Log($"Created new order for {order.Meal.name}.");
