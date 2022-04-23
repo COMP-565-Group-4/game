@@ -6,24 +6,12 @@ using UnityEngine.InputSystem;
 
 public class GameState : MonoBehaviour
 {
-    public int CurrentRound = 1;
-    public static uint TotalRounds = 7;
-    public static int CurrentMoney = 0;
-    public static int LastRoundMoney = 0;
     public static bool GamePaused = false;
 
     private static HUDManager _hudManager;
 
     public UnityEvent pauseEvent;
     public UnityEvent resumeEvent;
-
-    void Start()
-    {
-        _hudManager = GameObject.Find("HUD").GetComponent<HUDManager>();
-
-        _hudManager.Round = (uint) CurrentRound;
-        _hudManager.TotalRounds = TotalRounds;
-    }
 
     public void PauseEventHandler(InputAction.CallbackContext context)
     {
@@ -49,12 +37,5 @@ public class GameState : MonoBehaviour
         GamePaused = false;
         Time.timeScale = 1.0f;
         resumeEvent.Invoke();
-    }
-
-    public static void AddMoney(int value)
-    {
-        // todo: "TotalMoney" variable, add value to it if value is positive?
-        CurrentMoney = CurrentMoney + value;
-        _hudManager.Money = (uint) CurrentMoney;
     }
 }

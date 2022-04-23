@@ -13,7 +13,7 @@ public class RoundManager : MonoBehaviour
     public Round[] Rounds;
 
     [Header("Events")]
-    public UnityEvent<Round, uint> RoundStartEvent;
+    public UnityEvent<Round, uint, uint> RoundStartEvent;
     public UnityEvent<Round, uint> RoundEndEvent;
     public UnityEvent<Round, uint> RoundNextEvent;
 
@@ -56,7 +56,7 @@ public class RoundManager : MonoBehaviour
         time = Round.Time;
         completedOrders = 0;
         isRunning = true;
-        RoundStartEvent.Invoke(Round, roundNumber);
+        RoundStartEvent.Invoke(Round, roundNumber, (uint) Rounds.Length);
     }
 
     /// <summary>
@@ -86,7 +86,8 @@ public class RoundManager : MonoBehaviour
     /// <see cref="Round.OrderCount"/>.
     /// </summary>
     /// <param name="order">The completed <see cref="Order"/>.</param>
-    public void OrderCompleteEventHandler(Order order)
+    /// <param name="currentOrder">The currently displayed order's number.</param>
+    public void OrderCompleteEventHandler(Order order, uint currentOrder)
     {
         completedOrders += 1;
 

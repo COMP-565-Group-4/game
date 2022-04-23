@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 
 using ScriptableObjects;
 
@@ -33,124 +34,51 @@ public class HUDManager : MonoBehaviour
     [Tooltip("TMP component for the held item name text")]
     public TextMeshProUGUI HeldItemNameText;
 
-    [Header("Values")]
-    [SerializeField]
-    [Tooltip("Current round")]
-    private uint round;
+    private Order order;
+    private uint currentOrder = 0;
+    private uint totalOrders = 0;
 
-    [SerializeField]
-    [Tooltip("Total number of rounds")]
-    private uint totalRounds;
-
-    [SerializeField]
-    [Tooltip("Amount of money the player possesses")]
-    private uint money;
-
-    [Header("Time")]
-    [SerializeField]
-    [Tooltip("Minutes remaining for the current round")]
-    private uint minutes;
-
-    [SerializeField]
-    [Tooltip("Seconds remaining for the current round")]
-    private uint seconds;
-
-    [Header("Orders")]
-    [SerializeField]
-    [Tooltip("Currently displayed order's number")]
-    private uint order;
-
-    [SerializeField]
-    [Tooltip("Total number of orders")]
-    private uint totalOrders;
-
-    [SerializeField]
-    [Tooltip("Currently displayed order's recipe's name")]
-    private string orderRecipeName;
-
-    [SerializeField]
-    [Tooltip("Currently displayed order's recipe")]
-    private string orderRecipe;
-
-    public uint Round
+    public void RoundStartEventHandler(Round round, uint number, uint total)
     {
-        get => round;
-        set {
-            round = value;
-            RoundText.text = $"{value}/{TotalRounds}";
+        RoundText.text = $"{number}/{total}";
+        order = null;
+        currentOrder = 0;
+        totalOrders = 0;
+    }
+
+    public void OrderCreateEventHandler(Order order)
+    {
+        totalOrders += 1;
+        if (this.order is null) {
+            // This is the first order; display it.
+            this.order = order;
+            currentOrder = 1;
+            SetAllOrderText();
+        } else {
+            // Otherwise, just make sure the total is up to date.
+            // New orders are added to the end, so the current number won't change.
+            OrderNumberText.text = $"{currentOrder}/{totalOrders}";
         }
     }
 
-    public uint TotalRounds
+    public void OrderCompleteEventHandler(Order order, uint currentOrder)
     {
-        get => totalRounds;
-        set {
-            totalRounds = value;
-            RoundText.text = $"{Round}/{value}";
-        }
+        this.currentOrder = currentOrder + 1;
+        DecrementTotalOrders();
     }
 
-    public uint Money
+    public void OrderFailureEventHandler(Order order, uint currentOrder)
     {
-        get => money;
-        set {
-            money = value;
-            MoneyText.text = value.ToString();
-        }
+        this.currentOrder = currentOrder + 1;
+        DecrementTotalOrders();
     }
 
-    public uint Minutes
+    public void OrderNextEventHandler(Order order, uint currentOrder)
     {
-        get => minutes;
-        set {
-            minutes = value;
-            TimeText.text = $"{value:00}:{Seconds:00}";
-        }
-    }
+        this.order = order;
+        this.currentOrder = currentOrder + 1;
 
-    public uint Seconds
-    {
-        get => seconds;
-        set {
-            seconds = value;
-            TimeText.text = $"{Minutes:00}:{value:00}";
-        }
-    }
-
-    public uint Order
-    {
-        get => order;
-        set {
-            order = value;
-            OrderNumberText.text = $"{value}/{TotalOrders}";
-        }
-    }
-
-    public uint TotalOrders
-    {
-        get => totalOrders;
-        set {
-            totalOrders = value;
-            OrderNumberText.text = $"{Order}/{value}";
-        }
-    }
-
-    public string OrderRecipeName
-    {
-        get => orderRecipeName;
-        set {
-            orderRecipeName = value;
-            OrderRecipeNameText.text = value;
-        }
-    }
-
-    public string OrderRecipe
-    {
-        get => orderRecipe;
-        set {
-            orderRecipe = value;
-            OrderRecipeText.text = value;
-        }
+        SetAllOrderText();
     }
 
     private void OnEnable()
@@ -168,22 +96,24 @@ public class HUDManager : MonoBehaviour
         HeldItemNameText.text = item is null ? "nothing" : item.name;
     }
 
-#if UNITY_EDITOR
-    /// <summary>
-    /// Triggers setters of properties when a backing field is updated via the inspector.
-    /// </summary>
-    private void OnValidate()
+    private void DecrementTotalOrders()
     {
-        Round = round;
-        TotalRounds = totalRounds;
-        Money = money;
-        Minutes = minutes;
-        Seconds = seconds;
-        Order = order;
-        TotalOrders = totalOrders;
-        OrderRecipeName = orderRecipeName;
-        OrderRecipe = orderRecipe;
+        totalOrders -= 1;
+        OrderNumberText.text = $"{currentOrder}/{totalOrders}";
+
+        if (totalOrders == 0) {
+            OrderRecipeNameText.text = "";
+            OrderRecipeText.text = "No more orders currently available.";
+        }
     }
-#endif
+
+    private void SetAllOrderText()
+    {
+        OrderRecipeNameText.text = order.Meal.name;
+        OrderNumberText.text = $"{currentOrder}/{totalOrders}";
+
+        // TODO: merge identical ingredient to display a count instead e.g. "2x egg".
+        OrderRecipeText.text = string.Join("\n", order.Meal.ChildIngredients.Select(i => i.name));
+    }
 }
 }

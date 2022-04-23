@@ -6,6 +6,7 @@ using ScriptableObjects;
 
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.InputSystem;
 
 using Random = UnityEngine.Random;
 
@@ -26,11 +27,13 @@ public class OrderData
 public class OrderManager : MonoBehaviour
 {
     public UnityEvent<Order> OrderCreateEvent;
-    public UnityEvent<Order> OrderCompleteEvent;
-    public UnityEvent<Order> OrderFailureEvent;
+    public UnityEvent<Order, uint> OrderCompleteEvent;
+    public UnityEvent<Order, uint> OrderFailureEvent;
+    public UnityEvent<Order, uint> OrderNextEvent;
 
     private Round round;
     private List<OrderData> orders = new List<OrderData>();
+    private int currentOrder = 0;
     private float newOrderDelta;
     private bool isRunning = false;
 
@@ -57,7 +60,7 @@ public class OrderManager : MonoBehaviour
             // TODO: A List isn't efficient for this.
             var order = orders.First(order => order.Order.Meal == ingredient);
             orders.Remove(order);
-            OrderCompleteEvent.Invoke(order.Order);
+            OrderCompleteEvent.Invoke(order.Order, (uint) currentOrder);
         } catch (InvalidOperationException) {
             Debug.Log("No associated order found; ignoring meal.");
         }
@@ -68,10 +71,13 @@ public class OrderManager : MonoBehaviour
     /// </summary>
     /// <param name="newRound">The <see cref="Round"/> that started.</param>
     /// <param name="roundNumber">The number of the round that started.</param>
-    public void RoundStartEventHandler(Round newRound, uint roundNumber)
+    /// <param name="totalRounds">The total number of rounds in the game.</param>
+    public void RoundStartEventHandler(Round newRound, uint roundNumber, uint totalRounds)
     {
+        // Initialise it to be > the frequency so a new order is instantly created.
+        newOrderDelta = newRound.OrderFrequency + 1;
+
         round = newRound;
-        newOrderDelta = 0;
         isRunning = true;
     }
 
@@ -84,6 +90,19 @@ public class OrderManager : MonoBehaviour
     {
         isRunning = false;
         orders.Clear();
+    }
+
+    /// <summary>
+    /// Cycles the current order to display and invokes <see cref="OrderNextEvent"/>.
+    /// </summary>
+    /// <param name="context">The context of the triggered action.</param>
+    public void NextOrderInputEventHandler(InputAction.CallbackContext context)
+    {
+        if (!context.performed)
+            return;
+
+        currentOrder = (currentOrder + 1) % orders.Count;
+        OrderNextEvent.Invoke(orders[currentOrder].Order, (uint) currentOrder);
     }
 
     /// <summary>
@@ -103,7 +122,7 @@ public class OrderManager : MonoBehaviour
 
             if (order.Time <= 0) {
                 failures.Add(order);
-                OrderFailureEvent.Invoke(order.Order);
+                OrderFailureEvent.Invoke(order.Order, (uint) currentOrder);
             }
         }
 
@@ -126,6 +145,8 @@ public class OrderManager : MonoBehaviour
             orders.Add(new OrderData(order));
             newOrderDelta = 0;
             OrderCreateEvent.Invoke(order);
+
+            Debug.Log($"Created new order for {order.Meal.name}.");
         }
     }
 }
