@@ -20,7 +20,6 @@ public class GameState : MonoBehaviour
     void Start()
     {
         _hudManager = GameObject.Find("HUD").GetComponent<HUDManager>();
-        StartRound();
 
         _hudManager.Round = (uint) CurrentRound;
         _hudManager.TotalRounds = TotalRounds;
@@ -57,23 +56,5 @@ public class GameState : MonoBehaviour
         // todo: "TotalMoney" variable, add value to it if value is positive?
         CurrentMoney = CurrentMoney + value;
         _hudManager.Money = (uint) CurrentMoney;
-    }
-
-    void StartRound()
-    {
-        print("Round " + CurrentRound + " started!");
-        // initialize some variables or whatever
-        // start round
-        transform.SendMessage("TimerStart");
-    }
-
-    void EndRound()
-    {
-        print("Round " + CurrentRound + " finished!");
-        // tally results
-        LastRoundMoney = CurrentMoney;
-        if (CurrentRound >= 7) {
-            // idk, go to a win screen or something
-        }
     }
 }

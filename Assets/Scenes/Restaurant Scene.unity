@@ -3906,7 +3906,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 10
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &455256809
 PrefabInstance:
@@ -9013,8 +9013,8 @@ GameObject:
   m_Component:
   - component: {fileID: 944408408}
   - component: {fileID: 944408407}
-  - component: {fileID: 944408406}
   - component: {fileID: 944408405}
+  - component: {fileID: 944408404}
   m_Layer: 0
   m_Name: GameStateController
   m_TagString: Untagged
@@ -9022,6 +9022,39 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &944408404
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 944408403}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f9b7ccd59282409c87c4a332a25d70ad, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  OrderCreateEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  OrderCompleteEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 944408405}
+        m_TargetAssemblyTypeName: RoundManager, Assembly-CSharp
+        m_MethodName: OrderCompleteEventHandler
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  OrderFailureEvent:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &944408405
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9031,23 +9064,45 @@ MonoBehaviour:
   m_GameObject: {fileID: 944408403}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 462ce3090dbda104c87e93a397062fb8, type: 3}
+  m_Script: {fileID: 11500000, guid: 05054c50a56c46da8ed5628c7658a9e8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &944408406
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 944408403}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 64b4e4056c50ed047b517ea9d77614a5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  RoundLength: 600
-  _paused: 0
+  Inventory: {fileID: 11400000, guid: 8c253e946d8d9254e9b201ea8badc340, type: 2}
+  Rounds:
+  - {fileID: 11400000, guid: 8785980552446bf46a921d1a4d8227c2, type: 2}
+  RoundStartEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 944408404}
+        m_TargetAssemblyTypeName: OrderManager, Assembly-CSharp
+        m_MethodName: RoundStartEventHandler
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  RoundEndEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 944408404}
+        m_TargetAssemblyTypeName: OrderManager, Assembly-CSharp
+        m_MethodName: RoundEndEventHandler
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  RoundNextEvent:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &944408407
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11541,60 +11596,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 5604385192542869491, guid: 8721be980d10a4f9dac00905eca498d3, type: 3}
   m_PrefabInstance: {fileID: 1162297377}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1206412809
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1206412811}
-  - component: {fileID: 1206412810}
-  m_Layer: 0
-  m_Name: OrderList
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1206412810
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1206412809}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5366f955343ac68438364e84458bc204, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  OrderPrefab: {fileID: 6313276549371025, guid: e4fcc78c814277347bb9a3540a22ec0e, type: 3}
-  MaxRunningOrders: 3
-  OrdersPerDay: 10
-  OrderCooldown: 30
-  BaseOrderTimeLimit: 60
-  DefaultOrderPrice: 100
-  Dishes:
-  - Eggy Toast
-  - Orange French Toast
-  - Cherry Tomato Toast
-  - Olive French Toast
---- !u!4 &1206412811
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1206412809}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -9.21572, y: -2.9915414, z: 19.725899}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 9
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1212313615
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -17335,7 +17336,7 @@ Transform:
   - {fileID: 1594257472195847302}
   - {fileID: 7032923194159839318}
   m_Father: {fileID: 0}
-  m_RootOrder: 11
+  m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1874985610
 PrefabInstance:
@@ -19974,7 +19975,7 @@ PrefabInstance:
     - target: {fileID: 856290723, guid: 87e8b48bbfe40d24f9a8604fb8fce79a, type: 3}
       propertyPath: OrderList
       value: 
-      objectReference: {fileID: 1206412809}
+      objectReference: {fileID: 0}
     - target: {fileID: 1662886804448198777, guid: 87e8b48bbfe40d24f9a8604fb8fce79a, type: 3}
       propertyPath: m_RootOrder
       value: 8
@@ -20133,7 +20134,7 @@ PrefabInstance:
     - target: {fileID: 8616685848737228376, guid: c5efc39a8aaf6e64ea40e9ad573e9b47, type: 3}
       propertyPath: m_ActionEvents.Array.data[7].m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 1206412810}
+      objectReference: {fileID: 0}
     - target: {fileID: 8616685848737228376, guid: c5efc39a8aaf6e64ea40e9ad573e9b47, type: 3}
       propertyPath: m_ActionEvents.Array.data[6].m_PersistentCalls.m_Calls.Array.data[0].m_CallState
       value: 2

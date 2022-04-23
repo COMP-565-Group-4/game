@@ -1,11 +1,11 @@
-using ScriptableObjects;
-
 using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.InputSystem.DualShock;
 
 namespace Interaction.Containers {
 public sealed class Counter : Container
 {
-    public GameObject OrderList;
+    public UnityEvent<Ingredient> OrderSubmitEvent;
 
     protected override void Extract()
     {
@@ -14,24 +14,23 @@ public sealed class Counter : Container
 
     protected override void Insert()
     {
-        // retrieve the object from player's inventory
-        GameObject dish = inventory.RemoveItem();
+        // TODO: don't allow item to be placed if it's not for any active order.
+        try {
+            var ingredient = inventory.HeldItem.GetComponentInChildren<Ingredient>();
 
-        // move dish to counter and display it
-        dish.transform.position = transform.position;
-        dish.SetActive(true);
+            // Done last to ensure it has the component before removing it.
+            var item = inventory.RemoveItem();
 
-        // see if anyone asked for this dish
-        bool hasOrder = OrderList.GetComponent<OrderList>().CheckOrder(dish.name);
-        if (hasOrder) {
-            // submit the order and then get rid of the dish
-            // (we can add an animation for this later)
-            OrderList.SendMessage("SubmitOrder", dish.name);
-            Destroy(dish, 3);
-        } else {
-            // just get rid of the dish
-            print("Sorry, we couldn't find a matching order for that " + dish.name + "!");
-            Destroy(dish, 3);
+            // Move dish to counter and display it
+            item.transform.position = transform.position;
+            item.SetActive(true);
+
+            Destroy(item, 3);
+            OrderSubmitEvent.Invoke(ingredient);
+
+            Debug.Log($"Placed {item.name} on the counter.");
+        } catch (MissingComponentException) {
+            print($"Can't place {inventory.HeldItem.name} on the counter: not an ingredient.");
         }
     }
 
