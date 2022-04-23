@@ -64,8 +64,9 @@ public class Appliance : Container
         // TODO: disallow multiple products that require the same inputs?
         foreach (var product in Products) {
             // TODO: more robust (but still DRY) way to determine ingredient type
-            var productNames = product.ChildIngredients.Select(i => i.name);
-            var inputNames = Inputs.Select(i => i.name);
+            // TODO: performance...?
+            var productNames = product.ChildIngredients.Select(i => i.name).OrderBy(i => i);
+            var inputNames = Inputs.Select(i => i.name).OrderBy(i => i);
 
             if (productNames.SequenceEqual(inputNames)) {
                 Output = product;
