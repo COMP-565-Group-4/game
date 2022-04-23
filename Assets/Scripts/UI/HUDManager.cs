@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 
 using ScriptableObjects;
@@ -32,6 +33,12 @@ public class HUDManager : MonoBehaviour
 
     [Tooltip("TMP component for the held item name text")]
     public TextMeshProUGUI HeldItemNameText;
+
+    private void Update()
+    {
+        var minutes = Math.DivRem((long) RoundManager.Instance.Time, 60, out long seconds);
+        TimeText.text = $"{minutes:00}:{seconds:00}";
+    }
 
     public void RoundStartEventHandler(Round round, uint number, uint total)
     {
