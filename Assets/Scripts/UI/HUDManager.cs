@@ -57,6 +57,7 @@ public class HUDManager : MonoBehaviour
     public void RoundStartEventHandler(Round round, uint number, uint total)
     {
         this.round.text = $"{number}/{total}";
+        money.text = "0";
         shownOrder = null;
     }
 

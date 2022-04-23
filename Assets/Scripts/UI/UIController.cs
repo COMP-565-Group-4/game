@@ -45,5 +45,21 @@ public class UIController : MonoBehaviour
         startMenu.SetActive(false);
         Cursor.lockState = CursorLockMode.Locked;
     }
+
+    public void RestartRoundEventHandler()
+    {
+        RoundManager.Instance.EndRound(true);
+        RoundManager.Instance.StartRound();
+        GameState.Instance.Resume();
+    }
+
+    public void QuitRoundEventHandler()
+    {
+        RoundManager.Instance.EndRound(true);
+        GameState.Instance.Resume();
+
+        startMenu.SetActive(true);
+        Cursor.lockState = CursorLockMode.Confined;
+    }
 }
 }

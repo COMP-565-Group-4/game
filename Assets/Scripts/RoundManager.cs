@@ -18,7 +18,7 @@ public class RoundManager : Singleton<RoundManager>
 
     [Header("Events")]
     public UnityEvent<Round, uint, uint> RoundStartEvent;
-    public UnityEvent<Round, uint> RoundEndEvent;
+    public UnityEvent<Round, uint, bool> RoundEndEvent;
     public UnityEvent<Round, uint> RoundNextEvent;
 
     public Round Round => Rounds[RoundNumber - 1];
@@ -60,15 +60,19 @@ public class RoundManager : Singleton<RoundManager>
         OrdersCompleted = 0;
         Started = true;
         RoundStartEvent.Invoke(Round, RoundNumber, (uint) Rounds.Length);
+
+        // TODO: reload the scene somehow
+        // Or otherwise somehow reset all containers and spawned items.
     }
 
     /// <summary>
     /// Stops the round and invokes <see cref="RoundEndEvent"/>.
     /// </summary>
-    public void EndRound()
+    /// <param name="quit">Whether the player quit the round.</param>
+    public void EndRound(bool quit = false)
     {
         Started = false;
-        RoundEndEvent.Invoke(Round, RoundNumber);
+        RoundEndEvent.Invoke(Round, RoundNumber, quit);
     }
 
     /// <summary>
@@ -97,4 +101,6 @@ public class RoundManager : Singleton<RoundManager>
         if (order.List.Count == 1 && order.Value.ID >= Round.OrderCount)
             EndRound(); // The final order was completed.
     }
+
+    public void RestartRoundEventHandler() { }
 }

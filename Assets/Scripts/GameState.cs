@@ -33,14 +33,14 @@ public class GameState : Singleton<GameState>
 #endif
     }
 
-    private void Pause()
+    public void Pause()
     {
         GamePaused = true;
         Time.timeScale = 0f;
         PauseEvent.Invoke();
     }
 
-    private void Resume()
+    public void Resume()
     {
         GamePaused = false;
         Time.timeScale = 1.0f;
