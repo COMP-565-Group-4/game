@@ -20,7 +20,7 @@ public class HUDManager : MonoBehaviour
     [Header("Text")]
     [SerializeField]
     [Tooltip("TMP component for the round timer text")]
-    private TextMeshProUGUI time;
+    private TextMeshProUGUI roundTime;
 
     [SerializeField]
     [Tooltip("TMP component for the round text")]
@@ -35,8 +35,8 @@ public class HUDManager : MonoBehaviour
     private TextMeshProUGUI orderName;
 
     [SerializeField]
-    [Tooltip("TMP component for the order number text")]
-    private TextMeshProUGUI orderNumber;
+    [Tooltip("TMP component for the order timer text")]
+    private TextMeshProUGUI orderTime;
 
     [SerializeField]
     [Tooltip("TMP component for the order's required ingredients text")]
@@ -50,8 +50,8 @@ public class HUDManager : MonoBehaviour
 
     private void Update()
     {
-        var minutes = Math.DivRem((long) RoundManager.Instance.Time, 60, out long seconds);
-        time.text = $"{minutes:00}:{seconds:00}";
+        roundTime.text = FormatTime(RoundManager.Instance.Time);
+        orderTime.text = shownOrder is null ? "" : FormatTime(shownOrder.Value.TimeRemaining);
     }
 
     public void RoundStartEventHandler(Round round, uint number, uint total)
@@ -125,19 +125,23 @@ public class HUDManager : MonoBehaviour
 
     private void ClearOrderText()
     {
-        orderNumber.text = "";
         orderName.text = "";
         orderIngredients.text = "No more orders currently available.";
     }
 
     private void SetOrderText()
     {
-        orderNumber.text = $"#{shownOrder.Value.ID}";
-        orderName.text = shownOrder.Value.Meal.name;
+        orderName.text = shownOrder.Value.Meal.name + " (#" + shownOrder.Value.ID + ")";
 
         // TODO: merge identical ingredient to display a count instead e.g. "2x egg".
         orderIngredients.text =
             string.Join("\n", shownOrder.Value.Meal.ChildIngredients.Select(i => i.name));
+    }
+
+    private string FormatTime(float time)
+    {
+        var minutes = Math.DivRem((long) time, 60, out long seconds);
+        return $"{minutes:00}:{seconds:00}";
     }
 }
 }

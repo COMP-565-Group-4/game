@@ -207,7 +207,7 @@ GameObject:
   - component: {fileID: 5473443336066177540}
   - component: {fileID: 4337307798531746405}
   m_Layer: 0
-  m_Name: Body
+  m_Name: Ingredients
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -461,7 +461,7 @@ GameObject:
   - component: {fileID: 5780595687067797185}
   - component: {fileID: 470796163158993762}
   m_Layer: 0
-  m_Name: Name
+  m_Name: OrderName
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -514,7 +514,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Recipe Name
+  m_text: Order Name (#0)
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 5302535af1044152a457ed104f1f4b91, type: 2}
   m_sharedMaterial: {fileID: 2164040, guid: 5302535af1044152a457ed104f1f4b91, type: 2}
@@ -986,11 +986,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   inventory: {fileID: 11400000, guid: 8c253e946d8d9254e9b201ea8badc340, type: 2}
-  time: {fileID: 7229468217759181003}
+  roundTime: {fileID: 7229468217759181003}
   round: {fileID: 7229468217196291954}
   money: {fileID: 7229468217373267280}
   orderName: {fileID: 5780595687067797185}
-  orderNumber: {fileID: 7704692408047546815}
+  orderTime: {fileID: 7704692408047546815}
   orderIngredients: {fileID: 4337307798531746405}
   heldItemName: {fileID: 4160855143699648955}
 --- !u!1 &7229468216171777265
@@ -1690,7 +1690,7 @@ GameObject:
   - component: {fileID: 7229468217373267280}
   - component: {fileID: 7229468217373267281}
   m_Layer: 0
-  m_Name: Text (TMP)
+  m_Name: Money
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1840,7 +1840,7 @@ GameObject:
   - component: {fileID: 7229468217474888199}
   - component: {fileID: 7229468217474888196}
   m_Layer: 0
-  m_Name: TimePanel
+  m_Name: RoundTimePanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2032,7 +2032,7 @@ GameObject:
   - component: {fileID: 7229468217759181003}
   - component: {fileID: 7229468217759181005}
   m_Layer: 0
-  m_Name: Time
+  m_Name: RoundTime
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2227,7 +2227,7 @@ GameObject:
   - component: {fileID: 7704692408047546815}
   - component: {fileID: 2791864357677586153}
   m_Layer: 0
-  m_Name: Count
+  m_Name: OrderTime
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2280,7 +2280,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 0/0
+  m_text: 00:00
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 5302535af1044152a457ed104f1f4b91, type: 2}
   m_sharedMaterial: {fileID: 2164040, guid: 5302535af1044152a457ed104f1f4b91, type: 2}
