@@ -47,7 +47,8 @@ public class HUDManager : MonoBehaviour
 
     public void OrderCompleteEventHandler(Order order)
     {
-        // TODO: Avoid parsing string? But I don't want to duplicate tracking the money state...
+        // TODO: Avoid parsing string?
+        // Can't use RoundManager.Money cause it's updated by the same event.
         MoneyText.text = (int.Parse(MoneyText.text) + order.Reward).ToString();
     }
 

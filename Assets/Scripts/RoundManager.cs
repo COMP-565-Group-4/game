@@ -25,6 +25,8 @@ public class RoundManager : Singleton<RoundManager>
 
     public float Time { get; private set; } = 0;
 
+    public float Money { get; private set; } = 0;
+
     public uint OrdersCompleted { get; private set; } = 0;
 
     public bool Started { get; private set; } = false;
@@ -94,6 +96,7 @@ public class RoundManager : Singleton<RoundManager>
     public void OrderCompleteEventHandler(Order order)
     {
         OrdersCompleted += 1;
+        Money += order.Reward;
 
         if (OrdersCompleted == Round.OrderCount) {
             EndRound();
