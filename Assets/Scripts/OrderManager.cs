@@ -115,7 +115,8 @@ public class OrderManager : MonoBehaviour
         if (orders.Count == 0) {
             currentOrder = 0;
             OrderNextEvent.Invoke(null, 0, 0);
-        } else {
+        } else if (orders.Count > 1) // If there's only 1 it'll be the same order again.
+        {
             currentOrder = (currentOrder + 1) % orders.Count;
             OrderNextEvent.Invoke(
                 orders[currentOrder].Order, (uint) currentOrder, (uint) orders.Count
