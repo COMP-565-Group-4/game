@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 using ScriptableObjects;
 
@@ -93,10 +94,10 @@ public class RoundManager : Singleton<RoundManager>
     /// <see cref="Round.OrderCount"/>.
     /// </summary>
     /// <param name="order">The completed <see cref="Order"/>.</param>
-    public void OrderCompleteEventHandler(Order order)
+    public void OrderCompleteEventHandler(LinkedListNode<Order> order)
     {
         OrdersCompleted += 1;
-        Money += order.Reward;
+        Money += order.Value.Reward;
 
         if (OrdersCompleted == Round.OrderCount) {
             EndRound();

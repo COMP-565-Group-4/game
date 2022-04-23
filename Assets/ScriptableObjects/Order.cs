@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.Events;
 
 namespace ScriptableObjects
 {
@@ -14,5 +13,11 @@ namespace ScriptableObjects
 
         [Tooltip("Amount of seconds the player is granted to complete the order")]
         public uint Time;
+
+        [Tooltip("Amount of seconds the player has left to complete the order")]
+        public float TimeRemaining;
+
+        [Tooltip("Unique identifier (for the current round)")]
+        public uint ID;
     }
 }

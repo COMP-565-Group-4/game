@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using ScriptableObjects;
@@ -6,6 +7,7 @@ using ScriptableObjects;
 using TMPro;
 
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace UI {
 public class HUDManager : MonoBehaviour
@@ -34,6 +36,8 @@ public class HUDManager : MonoBehaviour
     [Tooltip("TMP component for the held item name text")]
     public TextMeshProUGUI HeldItemNameText;
 
+    private LinkedListNode<Order> shownOrder;
+
     private void Update()
     {
         var minutes = Math.DivRem((long) RoundManager.Instance.Time, 60, out long seconds);
@@ -43,39 +47,39 @@ public class HUDManager : MonoBehaviour
     public void RoundStartEventHandler(Round round, uint number, uint total)
     {
         RoundText.text = $"{number}/{total}";
+        shownOrder = null;
     }
 
-    public void OrderCompleteEventHandler(Order order)
+    public void OrderCreateEventHandler(LinkedListNode<Order> order)
+    {
+        if (shownOrder is null) {
+            // No orders are being displayed. Thus, display this order.
+            shownOrder = order;
+            SetOrderText();
+        }
+    }
+
+    public void OrderCompleteEventHandler(LinkedListNode<Order> order)
     {
         // TODO: Avoid parsing string?
         // Can't use RoundManager.Money cause it's updated by the same event.
-        MoneyText.text = (int.Parse(MoneyText.text) + order.Reward).ToString();
+        MoneyText.text = (int.Parse(MoneyText.text) + order.Value.Reward).ToString();
+
+        HandleRemovedOrder(order);
     }
 
-    public void OrderCreateEventHandler(Order order)
+    public void OrderFailureEventHandler(LinkedListNode<Order> order)
     {
-        if (OrderManager.Instance.OrdersCount == 1) {
-            // No order is being displayed, so display the created order.
-            OrderNextEventHandler(order, 0, 1);
-        } else {
-            // An order is being displayed; just update the total.
-            SetOrderNumber();
-        }
+        HandleRemovedOrder(order);
     }
 
-    public void OrderNextEventHandler(Order order, uint selectedOrder, uint ordersCount)
+    public void NextOrderEventHandler(InputAction.CallbackContext context)
     {
-        if (order is null) {
-            OrderRecipeNameText.text = "";
-            OrderRecipeText.text = "No more orders currently available.";
-        } else if (OrderRecipeNameText.text != order.Meal.name) {
-            OrderRecipeNameText.text = order.Meal.name;
-            // TODO: merge identical ingredient to display a count instead e.g. "2x egg".
-            OrderRecipeText.text =
-                string.Join("\n", order.Meal.ChildIngredients.Select(i => i.name));
-        }
+        if (!context.performed || shownOrder is null || shownOrder.Next == shownOrder.List.First)
+            return;
 
-        SetOrderNumber();
+        shownOrder = shownOrder.Next ?? shownOrder.List.First;
+        SetOrderText();
     }
 
     private void OnEnable()
@@ -93,12 +97,32 @@ public class HUDManager : MonoBehaviour
         HeldItemNameText.text = item is null ? "nothing" : item.name;
     }
 
-    private void SetOrderNumber()
+    private void HandleRemovedOrder(LinkedListNode<Order> order)
     {
-        var selectedOrder = OrderManager.Instance.OrdersCount == 0
-            ? 0
-            : OrderManager.Instance.SelectedOrderNumber + 1;
-        OrderNumberText.text = selectedOrder + "/" + OrderManager.Instance.OrdersCount;
+        if (order.List.Count == 0) {
+            shownOrder = null;
+            ClearOrderText();
+        } else if (order == shownOrder) {
+            shownOrder = order.Next ?? order.List.First;
+            SetOrderText();
+        }
+    }
+
+    private void ClearOrderText()
+    {
+        OrderNumberText.text = "";
+        OrderRecipeNameText.text = "";
+        OrderRecipeText.text = "No more orders currently available.";
+    }
+
+    private void SetOrderText()
+    {
+        OrderNumberText.text = $"#{shownOrder.Value.ID}";
+        OrderRecipeNameText.text = shownOrder.Value.Meal.name;
+
+        // TODO: merge identical ingredient to display a count instead e.g. "2x egg".
+        OrderRecipeText.text =
+            string.Join("\n", shownOrder.Value.Meal.ChildIngredients.Select(i => i.name));
     }
 }
 }
