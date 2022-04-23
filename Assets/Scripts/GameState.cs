@@ -24,6 +24,15 @@ public class GameState : Singleton<GameState>
         }
     }
 
+    public void QuitEventHandler()
+    {
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#else
+        Application.Quit();
+#endif
+    }
+
     private void Pause()
     {
         GamePaused = true;

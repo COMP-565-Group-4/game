@@ -33,12 +33,6 @@ public class RoundManager : Singleton<RoundManager>
 
     public bool Started { get; private set; } = false;
 
-    private void Start()
-    {
-        // TODO: for testing purposes; remove once hooked up to start menu
-        StartRound();
-    }
-
     private void Update()
     {
         if (GameState.Instance.GamePaused || !Started)

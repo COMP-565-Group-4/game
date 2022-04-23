@@ -1,3 +1,7 @@
+using System;
+
+using ScriptableObjects;
+
 using UnityEngine;
 
 namespace UI {
@@ -13,15 +17,32 @@ public class UIController : MonoBehaviour
     [SerializeField]
     private GameObject startMenu;
 
+    public void Start()
+    {
+        Cursor.lockState = CursorLockMode.Confined;
+    }
+
     public void PauseEventHandler()
     {
+        if (startMenu.activeInHierarchy)
+            return; // Ignore if start menu is being shown.
+
         pauseMenu.SetActive(true);
         Cursor.lockState = CursorLockMode.Confined;
     }
 
     public void ResumeEventHandler()
     {
+        if (startMenu.activeInHierarchy)
+            return; // Ignore if start menu is being shown.
+
         pauseMenu.SetActive(false);
+        Cursor.lockState = CursorLockMode.Locked;
+    }
+
+    public void RoundStartEventHandler(Round round, uint number, uint total)
+    {
+        startMenu.SetActive(false);
         Cursor.lockState = CursorLockMode.Locked;
     }
 }
