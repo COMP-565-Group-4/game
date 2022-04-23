@@ -8,6 +8,8 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
 
+using Utils;
+
 using Random = UnityEngine.Random;
 
 // TODO: can a separate class be avoided?
@@ -24,22 +26,26 @@ public class OrderData
     }
 }
 
-public class OrderManager : MonoBehaviour
+public class OrderManager : Singleton<OrderManager>
 {
     public UnityEvent<Order> OrderCreateEvent;
     public UnityEvent<Order> OrderCompleteEvent;
     public UnityEvent<Order> OrderFailureEvent;
     public UnityEvent<Order, uint, uint> OrderNextEvent;
 
-    private Round round;
     private List<OrderData> orders = new List<OrderData>();
-    private int currentOrder = 0;
-    private float newOrderDelta;
-    private bool isRunning = false;
+    private float newOrderDelta = 0;
+    private bool started = false;
+
+    public Round Round { get; private set; }
+
+    public int SelectedOrderNumber { get; private set; } = 0;
+
+    public int OrdersCount => orders.Count;
 
     private void Update()
     {
-        if (GameState.GamePaused || !isRunning)
+        if (GameState.Instance.GamePaused || !started)
             return;
 
         UpdateOrderTimes();
@@ -74,7 +80,7 @@ public class OrderManager : MonoBehaviour
     /// <summary>
     /// Resets internal state when a round starts.
     /// </summary>
-    /// <param name="newRound">The <see cref="Round"/> that started.</param>
+    /// <param name="newRound">The <see cref="ScriptableObjects.Round"/> that started.</param>
     /// <param name="roundNumber">The number of the round that started.</param>
     /// <param name="totalRounds">The total number of rounds in the game.</param>
     public void RoundStartEventHandler(Round newRound, uint roundNumber, uint totalRounds)
@@ -82,18 +88,18 @@ public class OrderManager : MonoBehaviour
         // Initialise it to be > the frequency so a new order is instantly created.
         newOrderDelta = newRound.OrderFrequency + 1;
 
-        round = newRound;
-        isRunning = true;
+        Round = newRound;
+        started = true;
     }
 
     /// <summary>
     /// Stops round timers and clears orders when the round ends.
     /// </summary>
-    /// <param name="endedRound">The <see cref="Round"/> that ended.</param>
+    /// <param name="endedRound">The <see cref="ScriptableObjects.Round"/> that ended.</param>
     /// <param name="roundNumber">The number of the round that ended.</param>
     public void RoundEndEventHandler(Round endedRound, uint roundNumber)
     {
-        isRunning = false;
+        started = false;
         orders.Clear();
     }
 
@@ -113,13 +119,13 @@ public class OrderManager : MonoBehaviour
     private void NextOrder()
     {
         if (orders.Count == 0) {
-            currentOrder = 0;
+            SelectedOrderNumber = 0;
             OrderNextEvent.Invoke(null, 0, 0);
         } else if (orders.Count > 1) // If there's only 1 it'll be the same order again.
         {
-            currentOrder = (currentOrder + 1) % orders.Count;
+            SelectedOrderNumber = (SelectedOrderNumber + 1) % orders.Count;
             OrderNextEvent.Invoke(
-                orders[currentOrder].Order, (uint) currentOrder, (uint) orders.Count
+                orders[SelectedOrderNumber].Order, (uint) SelectedOrderNumber, (uint) OrdersCount
             );
         }
     }
@@ -150,8 +156,9 @@ public class OrderManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Creates a new order based on the round's <see cref="Round.OrderFrequency"/> and
-    /// <see cref="Round.MaxConcurrentOrders"/>.
+    /// Creates a new order based on the round's <see
+    /// cref="ScriptableObjects.Round.OrderFrequency"/> and <see
+    /// cref="ScriptableObjects.Round.MaxConcurrentOrders"/>.
     /// </summary>
     /// <remarks>
     /// Invokes <see cref="OrderCreateEvent"/> when a new order is created.
@@ -160,8 +167,8 @@ public class OrderManager : MonoBehaviour
     {
         newOrderDelta += Time.deltaTime;
 
-        if (newOrderDelta >= round.OrderFrequency && orders.Count < round.MaxConcurrentOrders) {
-            var order = round.Orders[Random.Range(0, round.Orders.Length)];
+        if (newOrderDelta >= Round.OrderFrequency && orders.Count < Round.MaxConcurrentOrders) {
+            var order = Round.Orders[Random.Range(0, Round.Orders.Length)];
             orders.Add(new OrderData(order));
             newOrderDelta = 0;
 

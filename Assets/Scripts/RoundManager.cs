@@ -5,7 +5,9 @@ using ScriptableObjects;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class RoundManager : MonoBehaviour
+using Utils;
+
+public class RoundManager : Singleton<RoundManager>
 {
     public Inventory Inventory;
 
@@ -17,12 +19,15 @@ public class RoundManager : MonoBehaviour
     public UnityEvent<Round, uint> RoundEndEvent;
     public UnityEvent<Round, uint> RoundNextEvent;
 
-    private uint roundNumber = 1;
-    private float time;
-    private uint completedOrders = 0;
-    private bool isRunning = false;
+    public Round Round => Rounds[RoundNumber - 1];
 
-    private Round Round => Rounds[roundNumber - 1];
+    public uint RoundNumber { get; private set; } = 1;
+
+    public float Time { get; private set; } = 0;
+
+    public uint OrdersCompleted { get; private set; } = 0;
+
+    public bool Started { get; private set; } = false;
 
     private void Start()
     {
@@ -32,12 +37,12 @@ public class RoundManager : MonoBehaviour
 
     private void Update()
     {
-        if (GameState.GamePaused || !isRunning)
+        if (GameState.Instance.GamePaused || !Started)
             return;
 
-        time -= Time.deltaTime;
+        Time -= UnityEngine.Time.deltaTime;
 
-        if (time <= 0) {
+        if (Time <= 0) {
             EndRound();
         }
     }
@@ -53,10 +58,10 @@ public class RoundManager : MonoBehaviour
         // TODO: is there a better place to do this? Maybe GameState, using RoundStartEvent?
         Inventory.HeldItem = null;
 
-        time = Round.Time;
-        completedOrders = 0;
-        isRunning = true;
-        RoundStartEvent.Invoke(Round, roundNumber, (uint) Rounds.Length);
+        Time = Round.Time;
+        OrdersCompleted = 0;
+        Started = true;
+        RoundStartEvent.Invoke(Round, RoundNumber, (uint) Rounds.Length);
     }
 
     /// <summary>
@@ -64,8 +69,8 @@ public class RoundManager : MonoBehaviour
     /// </summary>
     public void EndRound()
     {
-        isRunning = false;
-        RoundEndEvent.Invoke(Round, roundNumber);
+        Started = false;
+        RoundEndEvent.Invoke(Round, RoundNumber);
     }
 
     /// <summary>
@@ -74,11 +79,11 @@ public class RoundManager : MonoBehaviour
     /// <exception cref="Exception">The current round is the last round.</exception>
     public void NextRound()
     {
-        if (roundNumber == Rounds.Length)
+        if (RoundNumber == Rounds.Length)
             throw new Exception("Cannot continue past the last round.");
 
-        roundNumber += 1;
-        RoundNextEvent.Invoke(Round, roundNumber);
+        RoundNumber += 1;
+        RoundNextEvent.Invoke(Round, RoundNumber);
     }
 
     /// <summary>
@@ -88,9 +93,9 @@ public class RoundManager : MonoBehaviour
     /// <param name="order">The completed <see cref="Order"/>.</param>
     public void OrderCompleteEventHandler(Order order)
     {
-        completedOrders += 1;
+        OrdersCompleted += 1;
 
-        if (completedOrders == Round.OrderCount) {
+        if (OrdersCompleted == Round.OrderCount) {
             EndRound();
         }
     }

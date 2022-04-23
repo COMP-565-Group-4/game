@@ -1,14 +1,13 @@
 using UnityEngine;
-using UI;
 
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
 
-public class GameState : MonoBehaviour
-{
-    public static bool GamePaused = false;
+using Utils;
 
-    private static HUDManager _hudManager;
+public class GameState : Singleton<GameState>
+{
+    public bool GamePaused = false;
 
     public UnityEvent pauseEvent;
     public UnityEvent resumeEvent;

@@ -67,7 +67,7 @@ public class FirstPersonController : MonoBehaviour
 
     private void Update()
     {
-        if (!GameState.GamePaused) {
+        if (!GameState.Instance.GamePaused) {
             JumpAndGravity();
             GroundedCheck();
             Move();
@@ -79,7 +79,7 @@ public class FirstPersonController : MonoBehaviour
 
     private void LateUpdate()
     {
-        if (!GameState.GamePaused) {
+        if (!GameState.Instance.GamePaused) {
             CameraRotation();
         }
     }
