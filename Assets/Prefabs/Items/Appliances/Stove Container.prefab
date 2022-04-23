@@ -147,11 +147,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af6445acf4674865856d3aa525b955f9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  outline: {fileID: 7760104677999388152}
-  inventory: {fileID: 11400000, guid: 8c253e946d8d9254e9b201ea8badc340, type: 2}
+  Outline: {fileID: 7760104677999388152}
+  Inventory: {fileID: 11400000, guid: 8c253e946d8d9254e9b201ea8badc340, type: 2}
   Products:
-  - {fileID: 11400000, guid: 9e02a1a270507a043921e5a488ee6b75, type: 2}
-  - {fileID: 11400000, guid: 8a4a5e71051910b479c84381616733c7, type: 2}
-  - {fileID: 11400000, guid: bdb2fc99b8bdf3e4c867041243d2412d, type: 2}
-  - {fileID: 11400000, guid: 435e6597092479f429be73d3c0081419, type: 2}
-  - {fileID: 11400000, guid: ec4e99feb6d59d643b991e4a1e389136, type: 2}
+  - {fileID: 725456807440275329, guid: c03b535299cbc354dac45d5b7f70a643, type: 3}
+  - {fileID: 2798676953617587097, guid: b50e0580d93f2894bab2bfb9818788ec, type: 3}
+  - {fileID: -4991440083295418531, guid: abfc532b6b386df40a797f34ce8f3e6e, type: 3}
+  - {fileID: -4809708566228436465, guid: 78a11a4d93f73b549b935ab72fe232cd, type: 3}
+  - {fileID: 7506326552804501985, guid: 796f08c4b76e4164ebd3759e639cb9b1, type: 3}

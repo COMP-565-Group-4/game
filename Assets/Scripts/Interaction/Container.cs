@@ -5,7 +5,7 @@ public abstract class Container : Interactable
 {
     protected override void Hold()
     {
-        if (inventory.HeldItem == null) {
+        if (Inventory.HeldItem == null) {
             Extract();
         } else {
             Insert();

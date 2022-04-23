@@ -16,10 +16,10 @@ public sealed class Counter : Container
     {
         // TODO: don't allow item to be placed if it's not for any active order.
         try {
-            var ingredient = inventory.HeldItem.GetComponentInChildren<Ingredient>();
+            var ingredient = Inventory.HeldItem.GetComponentInChildren<Ingredient>();
 
             // Done last to ensure it has the component before removing it.
-            var item = inventory.RemoveItem();
+            var item = Inventory.RemoveItem();
 
             // Move dish to counter and display it
             item.transform.position = transform.position;
@@ -30,7 +30,7 @@ public sealed class Counter : Container
 
             Debug.Log($"Placed {item.name} on the counter.");
         } catch (MissingComponentException) {
-            print($"Can't place {inventory.HeldItem.name} on the counter: not an ingredient.");
+            print($"Can't place {Inventory.HeldItem.name} on the counter: not an ingredient.");
         }
     }
 

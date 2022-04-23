@@ -3,13 +3,14 @@ using UnityEngine;
 namespace Interaction {
 public class OutlineOnHover : MonoBehaviour
 {
-    public Outline outline;
+    [SerializeField]
+    protected Outline Outline;
 
     private bool isHovered = false;
 
     protected virtual void Update()
     {
-        outline.enabled = isHovered;
+        Outline.enabled = isHovered;
         isHovered = false;
     }
 

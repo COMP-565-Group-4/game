@@ -8,7 +8,8 @@ using UnityEngine.InputSystem;
 namespace Interaction {
 public abstract class Interactable : OutlineOnHover
 {
-    public Inventory inventory;
+    [SerializeField]
+    protected Inventory Inventory;
 
     private InputAction grabAction;
     private InputAction interactAction;
@@ -47,13 +48,13 @@ public abstract class Interactable : OutlineOnHover
 
     private void GrabEventHandler(InputAction.CallbackContext context)
     {
-        if (outline.enabled)
+        if (Outline.enabled)
             Hold();
     }
 
     private void InteractEventHandler(InputAction.CallbackContext context)
     {
-        if (outline.enabled)
+        if (Outline.enabled)
             Interact();
     }
 }

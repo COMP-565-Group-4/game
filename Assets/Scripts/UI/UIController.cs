@@ -4,9 +4,14 @@ namespace UI {
 public class UIController : MonoBehaviour
 {
     [Header("Canvases")]
-    public GameObject hud;
-    public GameObject pauseMenu;
-    public GameObject startMenu;
+    [SerializeField]
+    private GameObject hud;
+
+    [SerializeField]
+    private GameObject pauseMenu;
+
+    [SerializeField]
+    private GameObject startMenu;
 
     public void PauseEventHandler()
     {

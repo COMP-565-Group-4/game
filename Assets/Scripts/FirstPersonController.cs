@@ -9,60 +9,63 @@ using UnityEngine.InputSystem;
 [RequireComponent(typeof(PlayerInput))]
 public class FirstPersonController : MonoBehaviour
 {
-    public PlayerData data;
+    [SerializeField]
+    private PlayerData data;
 
     [Header("Cinemachine")]
     [Tooltip("The follow target set in the Cinemachine Virtual Camera that the camera will follow")]
     public GameObject CinemachineCameraTarget;
+
     [Tooltip("How far in degrees can you move the camera up")]
     public float TopClamp = 90.0f;
+
     [Tooltip("How far in degrees can you move the camera down")]
     public float BottomClamp = -90.0f;
 
     // cinemachine
-    private float _cinemachineTargetPitch;
+    private float cinemachineTargetPitch;
 
     // player
-    private float _speed;
-    private float _rotationVelocity;
-    private float _verticalVelocity;
-    private float _terminalVelocity = 53.0f;
+    private float speed;
+    private float rotationVelocity;
+    private float verticalVelocity;
+    private float terminalVelocity = 53.0f;
 
     // timeout deltatime
-    private float _jumpTimeoutDelta;
-    private float _fallTimeoutDelta;
+    private float jumpTimeoutDelta;
+    private float fallTimeoutDelta;
 
-    private PlayerInput _playerInput;
-    private CharacterController _controller;
-    private MovementInputHandler _input;
-    private GameObject _mainCamera;
+    private PlayerInput playerInput;
+    private CharacterController controller;
+    private MovementInputHandler input;
+    private GameObject mainCamera;
 
-    private Camera _cam;
-    private Ray _ray;
+    private Camera cam;
+    private Ray ray;
 
-    private const float _threshold = 0.01f;
+    private const float THRESHOLD = 0.01f;
 
-    private bool IsCurrentDeviceMouse => _playerInput.currentControlScheme == "KeyboardMouse";
+    private bool IsCurrentDeviceMouse => playerInput.currentControlScheme == "KeyboardMouse";
 
     private void Awake()
     {
         // get a reference to our main camera
-        if (_mainCamera == null) {
-            _mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
+        if (mainCamera == null) {
+            mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
         }
     }
 
     private void Start()
     {
-        _controller = GetComponent<CharacterController>();
-        _input = GetComponent<MovementInputHandler>();
-        _playerInput = GetComponent<PlayerInput>();
+        controller = GetComponent<CharacterController>();
+        input = GetComponent<MovementInputHandler>();
+        playerInput = GetComponent<PlayerInput>();
 
-        _cam = _mainCamera.GetComponent<Camera>();
+        cam = mainCamera.GetComponent<Camera>();
 
         // reset our timeouts on start
-        _jumpTimeoutDelta = data.JumpTimeout;
-        _fallTimeoutDelta = data.FallTimeout;
+        jumpTimeoutDelta = data.JumpTimeout;
+        fallTimeoutDelta = data.FallTimeout;
     }
 
     private void Update()
@@ -98,44 +101,44 @@ public class FirstPersonController : MonoBehaviour
     private void CameraRotation()
     {
         // if there is an input
-        if (_input.look.sqrMagnitude >= _threshold) {
+        if (input.look.sqrMagnitude >= THRESHOLD) {
             // Don't multiply mouse input by Time.deltaTime
             float deltaTimeMultiplier = IsCurrentDeviceMouse ? 1.0f : Time.deltaTime;
 
-            _cinemachineTargetPitch += _input.look.y * data.RotationSpeed * deltaTimeMultiplier;
-            _rotationVelocity = _input.look.x * data.RotationSpeed * deltaTimeMultiplier;
+            cinemachineTargetPitch += input.look.y * data.RotationSpeed * deltaTimeMultiplier;
+            rotationVelocity = input.look.x * data.RotationSpeed * deltaTimeMultiplier;
 
             // clamp our pitch rotation
-            _cinemachineTargetPitch = ClampAngle(_cinemachineTargetPitch, BottomClamp, TopClamp);
+            cinemachineTargetPitch = ClampAngle(cinemachineTargetPitch, BottomClamp, TopClamp);
 
             // Update Cinemachine camera target pitch
             CinemachineCameraTarget.transform.localRotation =
-                Quaternion.Euler(_cinemachineTargetPitch, 0.0f, 0.0f);
+                Quaternion.Euler(cinemachineTargetPitch, 0.0f, 0.0f);
 
             // rotate the player left and right
-            transform.Rotate(Vector3.up * _rotationVelocity);
+            transform.Rotate(Vector3.up * rotationVelocity);
         }
     }
 
     private void Move()
     {
         // set target speed based on move speed, sprint speed and if sprint is pressed
-        float targetSpeed = _input.sprint ? data.SprintSpeed : data.MoveSpeed;
+        float targetSpeed = input.sprint ? data.SprintSpeed : data.MoveSpeed;
 
         // a simplistic acceleration and deceleration designed to be easy to remove, replace, or
         // iterate upon
 
         // note: Vector2's == operator uses approximation so is not floating point error prone, and
         // is cheaper than magnitude if there is no input, set the target speed to 0
-        if (_input.move == Vector2.zero)
+        if (input.move == Vector2.zero)
             targetSpeed = 0.0f;
 
         // a reference to the players current horizontal velocity
         float currentHorizontalSpeed =
-            new Vector3(_controller.velocity.x, 0.0f, _controller.velocity.z).magnitude;
+            new Vector3(controller.velocity.x, 0.0f, controller.velocity.z).magnitude;
 
         float speedOffset = 0.1f;
-        float inputMagnitude = _input.analogMovement ? _input.move.magnitude : 1f;
+        float inputMagnitude = input.analogMovement ? input.move.magnitude : 1f;
 
         // accelerate or decelerate to target speed
         if (currentHorizontalSpeed < targetSpeed - speedOffset
@@ -143,33 +146,33 @@ public class FirstPersonController : MonoBehaviour
         {
             // creates curved result rather than a linear one giving a more organic speed change
             // note T in Lerp is clamped, so we don't need to clamp our speed
-            _speed = Mathf.Lerp(
+            speed = Mathf.Lerp(
                 currentHorizontalSpeed,
                 targetSpeed * inputMagnitude,
                 Time.deltaTime * data.SpeedChangeRate
             );
 
             // round speed to 3 decimal places
-            _speed = Mathf.Round(_speed * 1000f) / 1000f;
+            speed = Mathf.Round(speed * 1000f) / 1000f;
         } else {
-            _speed = targetSpeed;
+            speed = targetSpeed;
         }
 
         // normalise input direction
-        Vector3 inputDirection = new Vector3(_input.move.x, 0.0f, _input.move.y).normalized;
+        Vector3 inputDirection = new Vector3(input.move.x, 0.0f, input.move.y).normalized;
 
         // note: Vector2's != operator uses approximation so is not floating point error prone, and
         // is cheaper than magnitude if there is a move input rotate player when the player is
         // moving
-        if (_input.move != Vector2.zero) {
+        if (input.move != Vector2.zero) {
             // move
-            inputDirection = transform.right * _input.move.x + transform.forward * _input.move.y;
+            inputDirection = transform.right * input.move.x + transform.forward * input.move.y;
         }
 
         // move the player
-        _controller.Move(
-            inputDirection.normalized * (_speed * Time.deltaTime)
-            + new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime
+        controller.Move(
+            inputDirection.normalized * (speed * Time.deltaTime)
+            + new Vector3(0.0f, verticalVelocity, 0.0f) * Time.deltaTime
         );
     }
 
@@ -177,40 +180,40 @@ public class FirstPersonController : MonoBehaviour
     {
         if (data.Grounded) {
             // reset the fall timeout timer
-            _fallTimeoutDelta = data.FallTimeout;
+            fallTimeoutDelta = data.FallTimeout;
 
             // stop our velocity dropping infinitely when grounded
-            if (_verticalVelocity < 0.0f) {
-                _verticalVelocity = -2f;
+            if (verticalVelocity < 0.0f) {
+                verticalVelocity = -2f;
             }
 
             // Jump
-            if (_input.jump && _jumpTimeoutDelta <= 0.0f) {
+            if (input.jump && jumpTimeoutDelta <= 0.0f) {
                 // the square root of H * -2 * G = how much velocity needed to reach desired height
-                _verticalVelocity = Mathf.Sqrt(data.JumpHeight * -2f * data.Gravity);
+                verticalVelocity = Mathf.Sqrt(data.JumpHeight * -2f * data.Gravity);
             }
 
             // jump timeout
-            if (_jumpTimeoutDelta >= 0.0f) {
-                _jumpTimeoutDelta -= Time.deltaTime;
+            if (jumpTimeoutDelta >= 0.0f) {
+                jumpTimeoutDelta -= Time.deltaTime;
             }
         } else {
             // reset the jump timeout timer
-            _jumpTimeoutDelta = data.JumpTimeout;
+            jumpTimeoutDelta = data.JumpTimeout;
 
             // fall timeout
-            if (_fallTimeoutDelta >= 0.0f) {
-                _fallTimeoutDelta -= Time.deltaTime;
+            if (fallTimeoutDelta >= 0.0f) {
+                fallTimeoutDelta -= Time.deltaTime;
             }
 
             // if we are not grounded, do not jump
-            _input.jump = false;
+            input.jump = false;
         }
 
         // apply gravity over time if under terminal (multiply by delta time twice to linearly speed
         // up over time)
-        if (_verticalVelocity < _terminalVelocity) {
-            _verticalVelocity += data.Gravity * Time.deltaTime;
+        if (verticalVelocity < terminalVelocity) {
+            verticalVelocity += data.Gravity * Time.deltaTime;
         }
     }
 
@@ -249,13 +252,13 @@ public class FirstPersonController : MonoBehaviour
 
     private void DoRaycast()
     {
-        _ray = _cam.ViewportPointToRay(new Vector3(0.5F, 0.5F, 0));
+        ray = cam.ViewportPointToRay(new Vector3(0.5F, 0.5F, 0));
     }
 
     private void Hover()
     {
         RaycastHit hit;
-        if (Physics.Raycast(_ray, out hit, data.HoverDistance)) {
+        if (Physics.Raycast(ray, out hit, data.HoverDistance)) {
             if (hit.transform.GetComponent<MonoBehaviour>() != null) {
                 hit.transform.SendMessage("OnHover", SendMessageOptions.DontRequireReceiver);
             }

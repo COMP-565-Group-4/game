@@ -12,41 +12,50 @@ using UnityEngine.InputSystem;
 namespace UI {
 public class HUDManager : MonoBehaviour
 {
-    public Inventory inventory;
+    [SerializeField]
+    [Tooltip("Player's inventory")]
+    private Inventory inventory;
 
     [Header("Text")]
-    [Tooltip("TMP component for the timer text")]
-    public TextMeshProUGUI TimeText;
+    [SerializeField]
+    [Tooltip("TMP component for the round timer text")]
+    private TextMeshProUGUI time;
 
+    [SerializeField]
     [Tooltip("TMP component for the round text")]
-    public TextMeshProUGUI RoundText;
+    private TextMeshProUGUI round;
 
+    [SerializeField]
     [Tooltip("TMP component for the money text")]
-    public TextMeshProUGUI MoneyText;
+    private TextMeshProUGUI money;
 
-    [Tooltip("TMP component for the order's recipe's name text")]
-    public TextMeshProUGUI OrderRecipeNameText;
+    [SerializeField]
+    [Tooltip("TMP component for the order's name text")]
+    private TextMeshProUGUI orderName;
 
+    [SerializeField]
     [Tooltip("TMP component for the order number text")]
-    public TextMeshProUGUI OrderNumberText;
+    private TextMeshProUGUI orderNumber;
 
-    [Tooltip("TMP component for the order's recipe text")]
-    public TextMeshProUGUI OrderRecipeText;
+    [SerializeField]
+    [Tooltip("TMP component for the order's required ingredients text")]
+    private TextMeshProUGUI orderIngredients;
 
+    [SerializeField]
     [Tooltip("TMP component for the held item name text")]
-    public TextMeshProUGUI HeldItemNameText;
+    private TextMeshProUGUI heldItemName;
 
     private LinkedListNode<Order> shownOrder;
 
     private void Update()
     {
         var minutes = Math.DivRem((long) RoundManager.Instance.Time, 60, out long seconds);
-        TimeText.text = $"{minutes:00}:{seconds:00}";
+        time.text = $"{minutes:00}:{seconds:00}";
     }
 
     public void RoundStartEventHandler(Round round, uint number, uint total)
     {
-        RoundText.text = $"{number}/{total}";
+        this.round.text = $"{number}/{total}";
         shownOrder = null;
     }
 
@@ -63,7 +72,7 @@ public class HUDManager : MonoBehaviour
     {
         // TODO: Avoid parsing string?
         // Can't use RoundManager.Money cause it's updated by the same event.
-        MoneyText.text = (int.Parse(MoneyText.text) + order.Value.Reward).ToString();
+        money.text = (int.Parse(money.text) + order.Value.Reward).ToString();
 
         HandleRemovedOrder(order);
     }
@@ -94,7 +103,7 @@ public class HUDManager : MonoBehaviour
 
     private void ItemChangedEventHandler(GameObject item)
     {
-        HeldItemNameText.text = item is null ? "nothing" : item.name;
+        heldItemName.text = item is null ? "nothing" : item.name;
     }
 
     private void HandleRemovedOrder(LinkedListNode<Order> order)
@@ -110,18 +119,18 @@ public class HUDManager : MonoBehaviour
 
     private void ClearOrderText()
     {
-        OrderNumberText.text = "";
-        OrderRecipeNameText.text = "";
-        OrderRecipeText.text = "No more orders currently available.";
+        orderNumber.text = "";
+        orderName.text = "";
+        orderIngredients.text = "No more orders currently available.";
     }
 
     private void SetOrderText()
     {
-        OrderNumberText.text = $"#{shownOrder.Value.ID}";
-        OrderRecipeNameText.text = shownOrder.Value.Meal.name;
+        orderNumber.text = $"#{shownOrder.Value.ID}";
+        orderName.text = shownOrder.Value.Meal.name;
 
         // TODO: merge identical ingredient to display a count instead e.g. "2x egg".
-        OrderRecipeText.text =
+        orderIngredients.text =
             string.Join("\n", shownOrder.Value.Meal.ChildIngredients.Select(i => i.name));
     }
 }

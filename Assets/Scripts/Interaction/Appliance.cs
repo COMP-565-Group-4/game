@@ -24,7 +24,7 @@ public class Appliance : Container
                 var ingredient = Inputs.Pop();
                 var item = Instantiate(ingredient.gameObject);
                 item.name = ingredient.gameObject.name;
-                inventory.AddItem(item);
+                Inventory.AddItem(item);
             } else {
                 print("Appliance has no items left.");
             }
@@ -33,7 +33,7 @@ public class Appliance : Container
         } else {
             var item = Instantiate(Output);
             item.name = Output.name;
-            inventory.AddItem(item.gameObject);
+            Inventory.AddItem(item.gameObject);
             Output = null;
         }
     }
@@ -44,15 +44,15 @@ public class Appliance : Container
             return;
 
         try {
-            var ingredient = inventory.HeldItem.GetComponentInChildren<Ingredient>();
+            var ingredient = Inventory.HeldItem.GetComponentInChildren<Ingredient>();
             Inputs.Push(ingredient);
 
             // Done last to ensure it has the component before removing it.
-            var item = inventory.RemoveItem();
+            var item = Inventory.RemoveItem();
 
             Debug.Log($"Inserted {item.name} into the appliance.");
         } catch (MissingComponentException) {
-            print($"Can't insert {inventory.HeldItem.name} into appliance: not an ingredient.");
+            print($"Can't insert {Inventory.HeldItem.name} into appliance: not an ingredient.");
         }
     }
 

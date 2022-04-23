@@ -10,7 +10,8 @@ using Utils;
 
 public class RoundManager : Singleton<RoundManager>
 {
-    public Inventory Inventory;
+    [SerializeField]
+    private Inventory inventory;
 
     [Tooltip("Rounds that will be played (in the listed order)")]
     public Round[] Rounds;
@@ -59,7 +60,7 @@ public class RoundManager : Singleton<RoundManager>
     public void StartRound()
     {
         // TODO: is there a better place to do this? Maybe GameState, using RoundStartEvent?
-        Inventory.HeldItem = null;
+        inventory.HeldItem = null;
 
         Time = Round.Time;
         OrdersCompleted = 0;

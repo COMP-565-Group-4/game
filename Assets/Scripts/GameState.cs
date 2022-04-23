@@ -9,8 +9,8 @@ public class GameState : Singleton<GameState>
 {
     public bool GamePaused = false;
 
-    public UnityEvent pauseEvent;
-    public UnityEvent resumeEvent;
+    public UnityEvent PauseEvent;
+    public UnityEvent ResumeEvent;
 
     public void PauseEventHandler(InputAction.CallbackContext context)
     {
@@ -28,13 +28,13 @@ public class GameState : Singleton<GameState>
     {
         GamePaused = true;
         Time.timeScale = 0f;
-        pauseEvent.Invoke();
+        PauseEvent.Invoke();
     }
 
     private void Resume()
     {
         GamePaused = false;
         Time.timeScale = 1.0f;
-        resumeEvent.Invoke();
+        ResumeEvent.Invoke();
     }
 }

@@ -89,6 +89,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5f451e2b4d284db5a44949f299f7632b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  outline: {fileID: 1847341124482483937}
-  inventory: {fileID: 11400000, guid: 8c253e946d8d9254e9b201ea8badc340, type: 2}
-  playerData: {fileID: 11400000, guid: ac7868f5051788a4db64e49c56a6a601, type: 2}
+  Outline: {fileID: 1847341124482483937}
+  Inventory: {fileID: 11400000, guid: 8c253e946d8d9254e9b201ea8badc340, type: 2}
+  PlayerData: {fileID: 11400000, guid: ac7868f5051788a4db64e49c56a6a601, type: 2}

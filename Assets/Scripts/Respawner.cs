@@ -7,22 +7,22 @@ public class Respawner : MonoBehaviour
     [Tooltip("How many seconds should elapse between attempts to respawn the objects.")]
     public float Timer;
 
-    private float _timer;
+    private float timer;
 
     // Start is called before the first frame update
     void Start()
     {
-        _timer = Timer;
+        timer = Timer;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (_timer > 0) {
-            _timer = _timer - Time.deltaTime;
+        if (timer > 0) {
+            timer = timer - Time.deltaTime;
         } else {
             Respawn();
-            _timer = Timer;
+            timer = Timer;
         }
     }
 

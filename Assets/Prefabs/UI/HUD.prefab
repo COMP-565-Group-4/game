@@ -968,9 +968,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1d3078adb43f7b74ca294183f7e1ce73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CrosshairImage: {fileID: 7229468216628845757}
-  CrossSprite: {fileID: 21300000, guid: 07c12a82f1c1d76459cafcd1b9c4391b, type: 3}
-  DotSprite: {fileID: 21300000, guid: dab18e44fcddb6d4fa1950961d50d21f, type: 3}
+  crosshairImage: {fileID: 7229468216628845757}
+  crossSprite: {fileID: 21300000, guid: 07c12a82f1c1d76459cafcd1b9c4391b, type: 3}
+  dotSprite: {fileID: 21300000, guid: dab18e44fcddb6d4fa1950961d50d21f, type: 3}
   type: 0
   colour: {r: 1, g: 1, b: 1, a: 1}
 --- !u!114 &4600027812100472034
@@ -986,22 +986,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   inventory: {fileID: 11400000, guid: 8c253e946d8d9254e9b201ea8badc340, type: 2}
-  TimeText: {fileID: 7229468217759181003}
-  RoundText: {fileID: 7229468217196291954}
-  MoneyText: {fileID: 7229468217373267280}
-  OrderRecipeNameText: {fileID: 5780595687067797185}
-  OrderNumberText: {fileID: 7704692408047546815}
-  OrderRecipeText: {fileID: 4337307798531746405}
-  HeldItemNameText: {fileID: 4160855143699648955}
-  round: 0
-  totalRounds: 0
-  money: 0
-  minutes: 0
-  seconds: 0
-  order: 0
-  totalOrders: 0
-  orderRecipeName: Recipe Name
-  orderRecipe: 1 potato
+  time: {fileID: 7229468217759181003}
+  round: {fileID: 7229468217196291954}
+  money: {fileID: 7229468217373267280}
+  orderName: {fileID: 5780595687067797185}
+  orderNumber: {fileID: 7704692408047546815}
+  orderIngredients: {fileID: 4337307798531746405}
+  heldItemName: {fileID: 4160855143699648955}
 --- !u!1 &7229468216171777265
 GameObject:
   m_ObjectHideFlags: 0

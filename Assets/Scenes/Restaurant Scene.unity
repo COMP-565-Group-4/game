@@ -9114,7 +9114,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 05054c50a56c46da8ed5628c7658a9e8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Inventory: {fileID: 11400000, guid: 8c253e946d8d9254e9b201ea8badc340, type: 2}
+  inventory: {fileID: 11400000, guid: 8c253e946d8d9254e9b201ea8badc340, type: 2}
   Rounds:
   - {fileID: 11400000, guid: 8785980552446bf46a921d1a4d8227c2, type: 2}
   RoundStartEvent:
@@ -9175,7 +9175,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   GamePaused: 0
-  pauseEvent:
+  PauseEvent:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1057810936}
@@ -9190,7 +9190,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  resumeEvent:
+  ResumeEvent:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1057810936}
@@ -20430,26 +20430,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 820248977}
     m_Modifications:
-    - target: {fileID: 1494628673581013479, guid: 5f5639877717d5749991cd13db68c10f, type: 3}
-      propertyPath: Products.Array.data[0]
-      value: 
-      objectReference: {fileID: 725456807440275329, guid: c03b535299cbc354dac45d5b7f70a643, type: 3}
-    - target: {fileID: 1494628673581013479, guid: 5f5639877717d5749991cd13db68c10f, type: 3}
-      propertyPath: Products.Array.data[1]
-      value: 
-      objectReference: {fileID: 2798676953617587097, guid: b50e0580d93f2894bab2bfb9818788ec, type: 3}
-    - target: {fileID: 1494628673581013479, guid: 5f5639877717d5749991cd13db68c10f, type: 3}
-      propertyPath: Products.Array.data[2]
-      value: 
-      objectReference: {fileID: -4991440083295418531, guid: abfc532b6b386df40a797f34ce8f3e6e, type: 3}
-    - target: {fileID: 1494628673581013479, guid: 5f5639877717d5749991cd13db68c10f, type: 3}
-      propertyPath: Products.Array.data[3]
-      value: 
-      objectReference: {fileID: -4809708566228436465, guid: 78a11a4d93f73b549b935ab72fe232cd, type: 3}
-    - target: {fileID: 1494628673581013479, guid: 5f5639877717d5749991cd13db68c10f, type: 3}
-      propertyPath: Products.Array.data[4]
-      value: 
-      objectReference: {fileID: 7506326552804501985, guid: 796f08c4b76e4164ebd3759e639cb9b1, type: 3}
     - target: {fileID: 7760104677999388157, guid: 5f5639877717d5749991cd13db68c10f, type: 3}
       propertyPath: m_Name
       value: Stove Container
