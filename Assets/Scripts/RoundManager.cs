@@ -99,8 +99,7 @@ public class RoundManager : Singleton<RoundManager>
         OrdersCompleted += 1;
         Money += order.Value.Reward;
 
-        if (OrdersCompleted == Round.OrderCount) {
-            EndRound();
-        }
+        if (order.List.Count == 0 && order.Value.ID >= Round.OrderCount)
+            EndRound(); // The final order was completed.
     }
 }

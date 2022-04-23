@@ -122,20 +122,27 @@ public class OrderManager : Singleton<OrderManager>
     {
         newOrderDelta += Time.deltaTime;
 
-        if (newOrderDelta >= Round.OrderFrequency && orders.Count < Round.MaxConcurrentOrders) {
-            // Select a random order from the pool of orders in the current round.
-            var original = Round.Orders[Random.Range(0, Round.Orders.Length)];
+        if (newOrderDelta < Round.OrderFrequency)
+            return; // Too soon to create a new order.
 
-            // Create a copy.
-            var order = Instantiate(original);
-            order.ID = ++idCounter;
-            order.TimeRemaining = order.Time;
+        if (orders.Count >= Round.MaxConcurrentOrders)
+            return; // Too many active orders already.
 
-            var node = orders.AddLast(order);
-            newOrderDelta = 0; // Reset how long it's been since a new order was created.
+        if ((orders.Last?.Value.ID ?? 0) >= Round.OrderCount)
+            return; // Maximum amount of new orders has been reached.
 
-            OrderCreateEvent.Invoke(node);
-            Debug.Log($"Created new order for {order.Meal.name}.");
-        }
+        // Select a random order from the pool of orders in the current round.
+        var original = Round.Orders[Random.Range(0, Round.Orders.Length)];
+
+        // Create a copy.
+        var order = Instantiate(original);
+        order.ID = ++idCounter;
+        order.TimeRemaining = order.Time;
+
+        var node = orders.AddLast(order);
+        newOrderDelta = 0; // Reset how long it's been since a new order was created.
+
+        OrderCreateEvent.Invoke(node);
+        Debug.Log($"Created new order for {order.Meal.name}.");
     }
 }
