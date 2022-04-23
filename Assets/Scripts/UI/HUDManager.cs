@@ -99,7 +99,7 @@ public class HUDManager : MonoBehaviour
 
     private void HandleRemovedOrder(LinkedListNode<Order> order)
     {
-        if (order.List.Count == 0) {
+        if (order.List.Count == 1) {
             shownOrder = null;
             ClearOrderText();
         } else if (order == shownOrder) {
