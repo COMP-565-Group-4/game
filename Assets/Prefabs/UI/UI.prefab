@@ -756,6 +756,22 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2124461405861557410, guid: 38d10aa3507e16a40b60e5e2fe007390, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 3039431692307581203}
+    - target: {fileID: 2124461405861557410, guid: 38d10aa3507e16a40b60e5e2fe007390, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: RestartRoundEventHandler
+      objectReference: {fileID: 0}
+    - target: {fileID: 9004323773161736543, guid: 38d10aa3507e16a40b60e5e2fe007390, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 3039431692307581203}
+    - target: {fileID: 9004323773161736543, guid: 38d10aa3507e16a40b60e5e2fe007390, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: QuitRoundEventHandler
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 38d10aa3507e16a40b60e5e2fe007390, type: 3}
 --- !u!1 &2574789914567359104 stripped
