@@ -2,6 +2,8 @@ using System;
 
 using ScriptableObjects;
 
+using TMPro;
+
 using UnityEngine;
 
 namespace UI {
@@ -19,6 +21,19 @@ public class UIController : MonoBehaviour
 
     [SerializeField]
     private GameObject roundEndMenu;
+
+    [Header("Round End Menu Components")]
+    [SerializeField]
+    [Tooltip("TMP component for the title of the round end menu")]
+    private TextMeshProUGUI roundEndTitle;
+
+    [SerializeField]
+    [Tooltip("TMP component for the round info shown by the round end menu")]
+    private TextMeshProUGUI roundEndInfo;
+
+    [SerializeField]
+    [Tooltip("TMP component for the continue button in the round end menu")]
+    private GameObject roundEndContinueButton;
 
     public void Start()
     {
@@ -45,11 +60,31 @@ public class UIController : MonoBehaviour
 
     public void RoundEndEventHandler(Round endedRound, uint roundNumber, RoundEndReason reason)
     {
-        if (reason is RoundEndReason.Restarted)
-            return;
+        switch (reason) {
+            case RoundEndReason.Won:
+                roundEndTitle.text =
+                    $"Round {roundNumber}/{RoundManager.Instance.Rounds.Length} Complete!";
+                roundEndContinueButton.SetActive(true);
+                break;
+            case RoundEndReason.TimedOut:
+                roundEndTitle.text = $"Round {roundNumber} Timed Out";
+                roundEndContinueButton.SetActive(false);
+                // TODO: Set restart button to purple when continue button is inactive.
+                break;
+            case RoundEndReason.Restarted:
+                return;
+            case RoundEndReason.Quit:
+                roundEndTitle.text = $"Round {roundNumber} Quit";
+                roundEndContinueButton.SetActive(false);
+                break;
+            default:
+                throw new ArgumentOutOfRangeException(nameof(reason), reason, null);
+        }
 
-        // TODO: set round's info in the UI.
-        // TODO: hide continue button if round wasn't won.
+        var minutes = Math.DivRem((long) RoundManager.Instance.Time, 60, out long seconds);
+        roundEndInfo.text = $"{minutes:00}:{seconds:00}\n"
+            + $"{RoundManager.Instance.OrdersCompleted}/{endedRound.OrderCount}\n"
+            + $"{RoundManager.Instance.Money:F0}";
 
         pauseMenu.SetActive(false);
         roundEndMenu.SetActive(true);
