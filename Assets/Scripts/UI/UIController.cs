@@ -43,8 +43,11 @@ public class UIController : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
     }
 
-    public void RoundEndEventHandler(Round endedRound, uint roundNumber, bool quit)
+    public void RoundEndEventHandler(Round endedRound, uint roundNumber, RoundEndReason reason)
     {
+        if (reason is RoundEndReason.Restarted)
+            return;
+
         // TODO: set round's info in the UI.
         // TODO: hide continue button if round wasn't won.
 
@@ -63,14 +66,14 @@ public class UIController : MonoBehaviour
 
     public void RestartRoundEventHandler()
     {
-        RoundManager.Instance.EndRound(quit: true);
+        RoundManager.Instance.EndRound(RoundEndReason.Restarted);
         RoundManager.Instance.StartRound();
     }
 
     public void QuitRoundEventHandler()
     {
         if (RoundManager.Instance.Started) {
-            RoundManager.Instance.EndRound(quit: true);
+            RoundManager.Instance.EndRound(RoundEndReason.Quit);
         } else {
             // If the round already ended, then go to the start menu.
             pauseMenu.SetActive(false);

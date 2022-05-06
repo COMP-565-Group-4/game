@@ -8,6 +8,14 @@ using UnityEngine.Events;
 
 using Utils;
 
+public enum RoundEndReason
+{
+    Won,
+    TimedOut,
+    Restarted,
+    Quit
+}
+
 public class RoundManager : Singleton<RoundManager>
 {
     [SerializeField]
@@ -18,7 +26,7 @@ public class RoundManager : Singleton<RoundManager>
 
     [Header("Events")]
     public UnityEvent<Round, uint, uint> RoundStartEvent;
-    public UnityEvent<Round, uint, bool> RoundEndEvent;
+    public UnityEvent<Round, uint, RoundEndReason> RoundEndEvent;
     public UnityEvent<Round, uint> RoundNextEvent;
 
     public Round Round => Rounds[RoundNumber - 1];
@@ -41,7 +49,7 @@ public class RoundManager : Singleton<RoundManager>
         Time -= UnityEngine.Time.deltaTime;
 
         if (Time <= 0) {
-            EndRound();
+            EndRound(RoundEndReason.TimedOut);
         }
     }
 
@@ -70,11 +78,11 @@ public class RoundManager : Singleton<RoundManager>
     /// <summary>
     /// Stops the round and invokes <see cref="RoundEndEvent"/>.
     /// </summary>
-    /// <param name="quit">Whether the player quit the round.</param>
-    public void EndRound(bool quit = false)
+    /// <param name="reason">The reason for the round ending.</param>
+    public void EndRound(RoundEndReason reason)
     {
         Started = false;
-        RoundEndEvent.Invoke(Round, RoundNumber, quit);
+        RoundEndEvent.Invoke(Round, RoundNumber, reason);
     }
 
     /// <summary>
@@ -101,7 +109,7 @@ public class RoundManager : Singleton<RoundManager>
         Money += order.Value.Reward;
 
         if (order.List.Count == 1 && order.Value.ID >= Round.OrderCount)
-            EndRound(); // The final order was completed.
+            EndRound(RoundEndReason.Won); // The final order was completed.
     }
 
     public void RestartRoundEventHandler() { }
