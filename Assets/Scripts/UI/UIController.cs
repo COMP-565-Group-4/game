@@ -79,5 +79,10 @@ public class UIController : MonoBehaviour
             Cursor.lockState = CursorLockMode.Confined;
         }
     }
+
+    public void PauseMenuCloseEventHandler()
+    {
+        GameState.Instance.Resume();
+    }
 }
 }
