@@ -63,6 +63,8 @@ public class RoundManager : Singleton<RoundManager>
 
         // TODO: reload the scene somehow
         // Or otherwise somehow reset all containers and spawned items.
+
+        GameState.Instance.Resume();
     }
 
     /// <summary>

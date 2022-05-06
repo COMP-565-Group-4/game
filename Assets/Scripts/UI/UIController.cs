@@ -17,6 +17,9 @@ public class UIController : MonoBehaviour
     [SerializeField]
     private GameObject startMenu;
 
+    [SerializeField]
+    private GameObject roundEndMenu;
+
     public void Start()
     {
         Cursor.lockState = CursorLockMode.Confined;
@@ -24,8 +27,8 @@ public class UIController : MonoBehaviour
 
     public void PauseEventHandler()
     {
-        if (startMenu.activeInHierarchy)
-            return; // Ignore if start menu is being shown.
+        if (!RoundManager.Instance.Started)
+            return; // Ignore if the round hasn't started.
 
         pauseMenu.SetActive(true);
         Cursor.lockState = CursorLockMode.Confined;
@@ -33,33 +36,48 @@ public class UIController : MonoBehaviour
 
     public void ResumeEventHandler()
     {
-        if (startMenu.activeInHierarchy)
-            return; // Ignore if start menu is being shown.
+        if (!RoundManager.Instance.Started)
+            return; // Ignore if the round hasn't started.
 
         pauseMenu.SetActive(false);
         Cursor.lockState = CursorLockMode.Locked;
     }
 
+    public void RoundEndEventHandler(Round endedRound, uint roundNumber, bool quit)
+    {
+        // TODO: set round's info in the UI.
+        // TODO: hide continue button if round wasn't won.
+
+        pauseMenu.SetActive(false);
+        roundEndMenu.SetActive(true);
+        Cursor.lockState = CursorLockMode.Confined;
+    }
+
     public void RoundStartEventHandler(Round round, uint number, uint total)
     {
+        pauseMenu.SetActive(false);
         startMenu.SetActive(false);
+        roundEndMenu.SetActive(false);
         Cursor.lockState = CursorLockMode.Locked;
     }
 
     public void RestartRoundEventHandler()
     {
-        RoundManager.Instance.EndRound(true);
+        RoundManager.Instance.EndRound(quit: true);
         RoundManager.Instance.StartRound();
-        GameState.Instance.Resume();
     }
 
     public void QuitRoundEventHandler()
     {
-        RoundManager.Instance.EndRound(true);
-        GameState.Instance.Resume();
-
-        startMenu.SetActive(true);
-        Cursor.lockState = CursorLockMode.Confined;
+        if (RoundManager.Instance.Started) {
+            RoundManager.Instance.EndRound(quit: true);
+        } else {
+            // If the round already ended, then go to the start menu.
+            pauseMenu.SetActive(false);
+            roundEndMenu.SetActive(false);
+            startMenu.SetActive(true);
+            Cursor.lockState = CursorLockMode.Confined;
+        }
     }
 }
 }
