@@ -97,6 +97,18 @@ MonoBehaviour:
   Outline: {fileID: 410890123176615172}
   Inventory: {fileID: 11400000, guid: 8c253e946d8d9254e9b201ea8badc340, type: 2}
   PlayerData: {fileID: 11400000, guid: ac7868f5051788a4db64e49c56a6a601, type: 2}
+--- !u!114 &-913221053876032742
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 410890123176615169}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b674e20b8704f6e8da56c2618a8e990, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &7247131539512331704
 PrefabInstance:
   m_ObjectHideFlags: 0
