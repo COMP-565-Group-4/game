@@ -20,9 +20,9 @@ MonoBehaviour:
   Gravity: -15
   JumpTimeout: 0.1
   FallTimeout: 0.15
-  HoverDistance: 2
-  SwapItems: 1
-  Grounded: 0
+  HoverDistance: 3
+  SwapItems: 0
+  Grounded: 1
   GroundedOffset: -0.14
   GroundedRadius: 0.5
   GroundLayers:
