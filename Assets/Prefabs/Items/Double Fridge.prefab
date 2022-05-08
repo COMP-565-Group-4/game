@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 8092415636922700904}
   - component: {fileID: 1045184299727304419}
   - component: {fileID: 6064499521965466251}
+  - component: {fileID: 3948450973432317434}
   m_Layer: 0
   m_Name: Fridge_SBS_DoorL
   m_TagString: Untagged
@@ -81,6 +82,20 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!64 &3948450973432317434
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 637810351838791653}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -184864597616452989, guid: 4ef85326d2b48fb48bee81014892b40d, type: 3}
 --- !u!1 &870475286893478888
 GameObject:
   m_ObjectHideFlags: 0
