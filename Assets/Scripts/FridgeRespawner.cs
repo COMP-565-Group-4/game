@@ -9,24 +9,31 @@ public class FridgeRespawner : MonoBehaviour
     private GameObject[] newThings;
 
     // Start is called before the first frame update
-    void Start() { }
+    void Start()
+    {
+        Prepare();
+    }
 
     void Prepare()
     {
-        foreach (GameObject thing in Things) {
-            GameObject newThing = Instantiate(thing);
-            newThing.name = thing.name;
+        newThings = new GameObject[Things.Length];
+        for (int i = 0; i < Things.Length; i++) {
+            newThings[i] = Instantiate(Things[i]);
+            newThings[i].name = Things[i].name;
+            newThings[i].SetActive(false);
         }
     }
 
     void Respawn()
     {
-        // foreach (GameObject thing in Things) {
-        //     if (transform.Find(thing.name) == null) {
-        //         GameObject newThing = Instantiate(thing);
-        //         newThing.name = thing.name;
-        //     }
-        // }
-        print("This feature is a work in progress!");
+        // print("This feature is a work in progress!");
+        for (int i = 0; i < Things.Length; i++) {
+            if (Things[i] == null || !Things[i].activeSelf) {
+                Things[i] = Instantiate(newThings[i]);
+                Things[i].name = newThings[i].name;
+                Things[i].SetActive(true);
+            }
+        }
+        Prepare();
     }
 }
