@@ -81,8 +81,8 @@ public class OrderManager : Singleton<OrderManager>
     /// </summary>
     /// <param name="endedRound">The <see cref="ScriptableObjects.Round"/> that ended.</param>
     /// <param name="roundNumber">The number of the round that ended.</param>
-    /// <param name="quit">Whether the player quit the round.</param>
-    public void RoundEndEventHandler(Round endedRound, uint roundNumber, bool quit)
+    /// <param name="reason">The reason for the round ending.</param>
+    public void RoundEndEventHandler(Round endedRound, uint roundNumber, RoundEndReason reason)
     {
         started = false;
         orders.Clear();
