@@ -4,36 +4,23 @@ using UnityEngine;
 
 public class FridgeRespawner : MonoBehaviour
 {
-    [Tooltip("Add the items you want to respawn here.")]
+    [Tooltip("Add the items you want to respawn here. Make sure they're inactive.")]
     public GameObject[] Things;
-    private GameObject[] newThings;
 
     // Start is called before the first frame update
     void Start()
     {
-        Prepare();
-    }
-
-    void Prepare()
-    {
-        newThings = new GameObject[Things.Length];
-        for (int i = 0; i < Things.Length; i++) {
-            newThings[i] = Instantiate(Things[i]);
-            newThings[i].name = Things[i].name;
-            newThings[i].SetActive(false);
-        }
+        Respawn();
     }
 
     void Respawn()
     {
-        // print("This feature is a work in progress!");
-        for (int i = 0; i < Things.Length; i++) {
-            if (Things[i] == null || !Things[i].activeSelf) {
-                Things[i] = Instantiate(newThings[i]);
-                Things[i].name = newThings[i].name;
-                Things[i].SetActive(true);
+        foreach (GameObject thing in Things) {
+            if (GameObject.Find(thing.name) == null) {
+                GameObject newThing = Instantiate(thing);
+                newThing.name = thing.name;
+                newThing.SetActive(true);
             }
         }
-        Prepare();
     }
 }
