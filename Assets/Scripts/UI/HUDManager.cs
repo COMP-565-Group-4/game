@@ -1,148 +1,182 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-
-using ScriptableObjects;
-
 using TMPro;
 
 using UnityEngine;
-using UnityEngine.InputSystem;
-using UnityEngine.UI;
 
 namespace UI {
 public class HUDManager : MonoBehaviour
 {
-    [SerializeField]
-    [Tooltip("Player's inventory")]
-    private Inventory inventory;
-
     [Header("Text")]
-    [SerializeField]
-    [Tooltip("TMP component for the round timer text")]
-    private TextMeshProUGUI roundTime;
+    [Tooltip("TMP component for the timer text")]
+    public TextMeshProUGUI TimeText;
 
-    [SerializeField]
     [Tooltip("TMP component for the round text")]
-    private TextMeshProUGUI round;
+    public TextMeshProUGUI RoundText;
 
-    [SerializeField]
     [Tooltip("TMP component for the money text")]
-    private TextMeshProUGUI money;
+    public TextMeshProUGUI MoneyText;
 
-    [SerializeField]
-    [Tooltip("TMP component for the order's name text")]
-    private TextMeshProUGUI orderName;
+    [Tooltip("TMP component for the order's recipe's name text")]
+    public TextMeshProUGUI OrderRecipeNameText;
 
-    [SerializeField]
-    [Tooltip("TMP component for the order timer text")]
-    private TextMeshProUGUI orderTime;
+    [Tooltip("TMP component for the order number text")]
+    public TextMeshProUGUI OrderNumberText;
 
-    [SerializeField]
-    [Tooltip("TMP component for the order's required ingredients text")]
-    private TextMeshProUGUI orderIngredients;
+    [Tooltip("TMP component for the order's recipe text")]
+    public TextMeshProUGUI OrderRecipeText;
 
-    [SerializeField]
     [Tooltip("TMP component for the held item name text")]
-    private TextMeshProUGUI heldItemName;
+    public TextMeshProUGUI HeldItemNameText;
 
-    private LinkedListNode<Order> shownOrder;
+    [Header("Values")]
+    [SerializeField]
+    [Tooltip("Current round")]
+    private uint round;
 
-    private void Update()
+    [SerializeField]
+    [Tooltip("Total number of rounds")]
+    private uint totalRounds;
+
+    [SerializeField]
+    [Tooltip("Amount of money the player possesses")]
+    private uint money;
+
+    [SerializeField]
+    [Tooltip("Name of the currently held item")]
+    private string heldItem;
+
+    [Header("Time")]
+    [SerializeField]
+    [Tooltip("Minutes remaining for the current round")]
+    private uint minutes;
+
+    [SerializeField]
+    [Tooltip("Seconds remaining for the current round")]
+    private uint seconds;
+
+    [Header("Orders")]
+    [SerializeField]
+    [Tooltip("Currently displayed order's number")]
+    private uint order;
+
+    [SerializeField]
+    [Tooltip("Total number of orders")]
+    private uint totalOrders;
+
+    [SerializeField]
+    [Tooltip("Currently displayed order's recipe's name")]
+    private string orderRecipeName;
+
+    [SerializeField]
+    [Tooltip("Currently displayed order's recipe")]
+    private string orderRecipe;
+
+    public uint Round
     {
-        roundTime.text = FormatTime(RoundManager.Instance.Time);
-        orderTime.text = shownOrder is null ? "" : FormatTime(shownOrder.Value.TimeRemaining);
-    }
-
-    public void RoundStartEventHandler(Round round, uint number, uint total)
-    {
-        this.round.text = $"{number}/{total}";
-        money.text = "0";
-        shownOrder = null;
-    }
-
-    public void OrderCreateEventHandler(LinkedListNode<Order> order)
-    {
-        if (shownOrder is null) {
-            // No orders are being displayed. Thus, display this order.
-            shownOrder = order;
-            SetOrderText();
+        get => round;
+        set {
+            round = value;
+            RoundText.text = $"{value}/{TotalRounds}";
         }
     }
 
-    public void OrderCompleteEventHandler(LinkedListNode<Order> order)
+    public uint TotalRounds
     {
-        // TODO: Avoid parsing string?
-        // Can't use RoundManager.Money cause it's updated by the same event.
-        money.text = (int.Parse(money.text) + order.Value.Reward).ToString();
-
-        HandleRemovedOrder(order);
-    }
-
-    public void OrderFailureEventHandler(LinkedListNode<Order> order)
-    {
-        HandleRemovedOrder(order);
-    }
-
-    public void NextOrderEventHandler(InputAction.CallbackContext context)
-    {
-        if (!context.performed || shownOrder is null || shownOrder.Next == shownOrder.List.First)
-            return;
-
-        shownOrder = shownOrder.Next ?? shownOrder.List.First;
-        SetOrderText();
-    }
-
-    private void OnEnable()
-    {
-        inventory.itemChangedEvent.AddListener(ItemChangedEventHandler);
-    }
-
-    private void OnDisable()
-    {
-        inventory.itemChangedEvent.RemoveListener(ItemChangedEventHandler);
-    }
-
-    private void ItemChangedEventHandler(GameObject item)
-    {
-        heldItemName.text = item is null ? "nothing" : item.name;
-
-        // Apparently this isn't ideal for performance, but IDK why it doesn't update on its own.
-        LayoutRebuilder.ForceRebuildLayoutImmediate(
-            heldItemName.GetComponentInParent<RectTransform>()
-        );
-    }
-
-    private void HandleRemovedOrder(LinkedListNode<Order> order)
-    {
-        if (order.List.Count == 1) {
-            shownOrder = null;
-            ClearOrderText();
-        } else if (order == shownOrder) {
-            shownOrder = order.Next ?? order.List.First;
-            SetOrderText();
+        get => totalRounds;
+        set {
+            totalRounds = value;
+            RoundText.text = $"{Round}/{value}";
         }
     }
 
-    private void ClearOrderText()
+    public uint Money
     {
-        orderName.text = "";
-        orderIngredients.text = "No more orders currently available.";
+        get => money;
+        set {
+            money = value;
+            MoneyText.text = value.ToString();
+        }
     }
 
-    private void SetOrderText()
+    public string HeldItem
     {
-        orderName.text = shownOrder.Value.Meal.name + " (#" + shownOrder.Value.ID + ")";
-
-        // TODO: merge identical ingredient to display a count instead e.g. "2x egg".
-        orderIngredients.text =
-            string.Join("\n", shownOrder.Value.Meal.ChildIngredients.Select(i => i.name));
+        get => heldItem;
+        set {
+            heldItem = value;
+            HeldItemNameText.text = value;
+        }
     }
 
-    private string FormatTime(float time)
+    public uint Minutes
     {
-        var minutes = Math.DivRem((long) time, 60, out long seconds);
-        return $"{minutes:00}:{seconds:00}";
+        get => minutes;
+        set {
+            minutes = value;
+            TimeText.text = $"{value:00}:{Seconds:00}";
+        }
     }
+
+    public uint Seconds
+    {
+        get => seconds;
+        set {
+            seconds = value;
+            TimeText.text = $"{Minutes:00}:{value:00}";
+        }
+    }
+
+    public uint Order
+    {
+        get => order;
+        set {
+            order = value;
+            OrderNumberText.text = $"{value}/{TotalOrders}";
+        }
+    }
+
+    public uint TotalOrders
+    {
+        get => totalOrders;
+        set {
+            totalOrders = value;
+            OrderNumberText.text = $"{Order}/{value}";
+        }
+    }
+
+    public string OrderRecipeName
+    {
+        get => orderRecipeName;
+        set {
+            orderRecipeName = value;
+            OrderRecipeNameText.text = value;
+        }
+    }
+
+    public string OrderRecipe
+    {
+        get => orderRecipe;
+        set {
+            orderRecipe = value;
+            OrderRecipeText.text = value;
+        }
+    }
+
+#if UNITY_EDITOR
+    /// <summary>
+    /// Triggers setters of properties when a backing field is updated via the inspector.
+    /// </summary>
+    protected void OnValidate()
+    {
+        Round = round;
+        TotalRounds = totalRounds;
+        Money = money;
+        HeldItem = heldItem;
+        Minutes = minutes;
+        Seconds = seconds;
+        Order = order;
+        TotalOrders = totalOrders;
+        OrderRecipeName = orderRecipeName;
+        OrderRecipe = orderRecipe;
+    }
+#endif
 }
 }

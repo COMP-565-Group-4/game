@@ -1,3 +1,5 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Respawner : MonoBehaviour
@@ -7,22 +9,22 @@ public class Respawner : MonoBehaviour
     [Tooltip("How many seconds should elapse between attempts to respawn the objects.")]
     public float Timer;
 
-    private float timer;
+    private float _timer;
 
     // Start is called before the first frame update
     void Start()
     {
-        timer = Timer;
+        _timer = Timer;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (timer > 0) {
-            timer = timer - Time.deltaTime;
+        if (_timer > 0) {
+            _timer = _timer - Time.deltaTime;
         } else {
             Respawn();
-            timer = Timer;
+            _timer = Timer;
         }
     }
 

@@ -12,17 +12,14 @@ public enum CrosshairType
 
 public class CrosshairManager : MonoBehaviour
 {
-    [SerializeField]
     [Tooltip("Image component for the crosshair sprite")]
-    private Image crosshairImage;
+    public Image CrosshairImage;
 
-    [SerializeField]
     [Tooltip("Sprite to display for the cross crosshair type")]
-    private Sprite crossSprite;
+    public Sprite CrossSprite;
 
-    [SerializeField]
     [Tooltip("Sprite to display for the dot crosshair type")]
-    private Sprite dotSprite;
+    public Sprite DotSprite;
 
     [SerializeField]
     [Tooltip("The kind of sprite to display for the crosshair")]
@@ -37,9 +34,9 @@ public class CrosshairManager : MonoBehaviour
         get => type;
         set {
             type = value;
-            crosshairImage.sprite = value switch {
-                CrosshairType.Cross => crossSprite,
-                CrosshairType.Dot => dotSprite,
+            CrosshairImage.sprite = value switch {
+                CrosshairType.Cross => CrossSprite,
+                CrosshairType.Dot => DotSprite,
                 _ => throw new ArgumentOutOfRangeException(nameof(value), value, null)
             };
         }
@@ -47,14 +44,14 @@ public class CrosshairManager : MonoBehaviour
 
     public Color Colour
     {
-        get => crosshairImage.color;
-        set => crosshairImage.color = value;
+        get => CrosshairImage.color;
+        set => CrosshairImage.color = value;
     }
 
     public float Size
     {
-        get => crosshairImage.rectTransform.sizeDelta.x;
-        set => crosshairImage.rectTransform.sizeDelta = new Vector2(value, value);
+        get => CrosshairImage.rectTransform.sizeDelta.x;
+        set => CrosshairImage.rectTransform.sizeDelta = new Vector2(value, value);
     }
 
 #if UNITY_EDITOR
