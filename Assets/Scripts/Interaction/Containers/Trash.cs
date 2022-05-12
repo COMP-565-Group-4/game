@@ -10,7 +10,7 @@ public class Trash : Container
     protected override void Extract() { }
     protected override void Insert()
     {
-        Inventory.RemoveItem();
+        Destroy(Inventory.RemoveItem());
     }
 }
 
