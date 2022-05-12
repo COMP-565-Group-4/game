@@ -244,6 +244,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Butter
       objectReference: {fileID: 0}
+    - target: {fileID: 2282478039773361495, guid: 214597576c177614397b9263063f1249, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 214597576c177614397b9263063f1249, type: 3}
 --- !u!1 &36485932 stripped
@@ -5301,6 +5305,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Orange
       objectReference: {fileID: 0}
+    - target: {fileID: 8079150755485161345, guid: fae3f6f6f347e3b4eb6c548909d25412, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8079150755485161346, guid: fae3f6f6f347e3b4eb6c548909d25412, type: 3}
       propertyPath: m_RootOrder
       value: 4
@@ -6029,6 +6037,10 @@ PrefabInstance:
     - target: {fileID: 5781542001252711582, guid: 305177d889a129e4d9f09ff413a5ad62, type: 3}
       propertyPath: m_Name
       value: Milk
+      objectReference: {fileID: 0}
+    - target: {fileID: 5781542001252711582, guid: 305177d889a129e4d9f09ff413a5ad62, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 305177d889a129e4d9f09ff413a5ad62, type: 3}
@@ -7640,6 +7652,10 @@ PrefabInstance:
     - target: {fileID: 410890123176615169, guid: b2e9cd11829709c429a916022447e1c2, type: 3}
       propertyPath: m_Name
       value: Cheese
+      objectReference: {fileID: 0}
+    - target: {fileID: 410890123176615169, guid: b2e9cd11829709c429a916022447e1c2, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 410890123176615170, guid: b2e9cd11829709c429a916022447e1c2, type: 3}
       propertyPath: m_RootOrder
@@ -9620,6 +9636,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Tomato
       objectReference: {fileID: 0}
+    - target: {fileID: 8968054390502846815, guid: 50cba943ee478b64495f979a2ae772bf, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 50cba943ee478b64495f979a2ae772bf, type: 3}
 --- !u!1001 &993086237
@@ -10387,6 +10407,10 @@ PrefabInstance:
     - target: {fileID: 6483440425049379521, guid: f458ccf2dd23de1418e0e3bf2817b709, type: 3}
       propertyPath: m_Name
       value: Steak
+      objectReference: {fileID: 0}
+    - target: {fileID: 6483440425049379521, guid: f458ccf2dd23de1418e0e3bf2817b709, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6483440425049379522, guid: f458ccf2dd23de1418e0e3bf2817b709, type: 3}
       propertyPath: m_RootOrder
@@ -12366,6 +12390,10 @@ PrefabInstance:
     - target: {fileID: 4054911122653100101, guid: dfb2fde40a136c448979d75aa2bc25d3, type: 3}
       propertyPath: m_Name
       value: Cream
+      objectReference: {fileID: 0}
+    - target: {fileID: 4054911122653100101, guid: dfb2fde40a136c448979d75aa2bc25d3, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4054911122653100102, guid: dfb2fde40a136c448979d75aa2bc25d3, type: 3}
       propertyPath: m_RootOrder
@@ -15046,6 +15074,10 @@ PrefabInstance:
     - target: {fileID: 3900918112264012648, guid: 7070a7ab29c743b41a178f36c028ca5b, type: 3}
       propertyPath: m_Name
       value: Sausage
+      objectReference: {fileID: 0}
+    - target: {fileID: 3900918112264012648, guid: 7070a7ab29c743b41a178f36c028ca5b, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3900918112264012651, guid: 7070a7ab29c743b41a178f36c028ca5b, type: 3}
       propertyPath: m_RootOrder
@@ -18619,6 +18651,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Olive
       objectReference: {fileID: 0}
+    - target: {fileID: 2984146750543818063, guid: 6bdd5d73cebbe0d418248b867542d73f, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6bdd5d73cebbe0d418248b867542d73f, type: 3}
 --- !u!1 &1860578915
@@ -20317,6 +20353,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Cherry
       objectReference: {fileID: 0}
+    - target: {fileID: 6163187967252372594, guid: e97b97c9b69efa045a36fa8560e5c821, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e97b97c9b69efa045a36fa8560e5c821, type: 3}
 --- !u!1 &2037266279
@@ -21159,6 +21199,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Bread
       objectReference: {fileID: 0}
+    - target: {fileID: 6267042595516046008, guid: 760380d257b9be445ac7779aae8194c2, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6267042595516046011, guid: 760380d257b9be445ac7779aae8194c2, type: 3}
       propertyPath: m_RootOrder
       value: 1
@@ -21356,6 +21400,10 @@ PrefabInstance:
     - target: {fileID: 2118423921578154869, guid: de0a34780e1f07641a3460de55edd853, type: 3}
       propertyPath: m_Name
       value: Egg
+      objectReference: {fileID: 0}
+    - target: {fileID: 2118423921578154869, guid: de0a34780e1f07641a3460de55edd853, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2118423921578154870, guid: de0a34780e1f07641a3460de55edd853, type: 3}
       propertyPath: m_RootOrder
