@@ -84,6 +84,8 @@ public class RoundManager : Singleton<RoundManager>
     {
         Started = false;
         RoundEndEvent.Invoke(Round, RoundNumber, reason);
+
+        GameState.Instance.Pause();
     }
 
     /// <summary>
