@@ -61,10 +61,14 @@ public class UIController : MonoBehaviour
     public void RoundEndEventHandler(Round endedRound, uint roundNumber, RoundEndReason reason)
     {
         switch (reason) {
-            case RoundEndReason.Won:
+            case RoundEndReason.RoundWon:
                 roundEndTitle.text =
                     $"Round {roundNumber}/{RoundManager.Instance.Rounds.Length} Complete!";
                 roundEndContinueButton.SetActive(true);
+                break;
+            case RoundEndReason.GameWon:
+                roundEndTitle.text = "All Rounds Complete!";
+                roundEndContinueButton.SetActive(false);
                 break;
             case RoundEndReason.TimedOut:
                 roundEndTitle.text = $"Round {roundNumber} Timed Out";
