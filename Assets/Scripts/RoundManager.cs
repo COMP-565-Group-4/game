@@ -10,7 +10,8 @@ using Utils;
 
 public enum RoundEndReason
 {
-    Won,
+    RoundWon,
+    GameWon,
     TimedOut,
     Restarted,
     Quit
@@ -83,6 +84,8 @@ public class RoundManager : Singleton<RoundManager>
     {
         Started = false;
         RoundEndEvent.Invoke(Round, RoundNumber, reason);
+
+        GameState.Instance.Pause();
     }
 
     /// <summary>
@@ -108,8 +111,12 @@ public class RoundManager : Singleton<RoundManager>
         OrdersCompleted += 1;
         Money += order.Value.Reward;
 
-        if (order.List.Count == 1 && order.Value.ID >= Round.OrderCount)
-            EndRound(RoundEndReason.Won); // The final order was completed.
+        // Check if the final order was completed.
+        if (order.List.Count == 1 && order.Value.ID >= Round.OrderCount) {
+            EndRound(
+                RoundNumber == Rounds.Length ? RoundEndReason.GameWon : RoundEndReason.RoundWon
+            );
+        }
     }
 
     public void RestartRoundEventHandler() { }

@@ -115,7 +115,11 @@ public class HUDManager : MonoBehaviour
 
     private void HandleRemovedOrder(LinkedListNode<Order> order)
     {
-        if (order.List.Count == 1) {
+        // .List is null if the node got unlinked. This could happen due to a race condition.
+        // If RoundManager handles OrderCompleteEvent before HUDManager, then it will end the round,
+        // and invoke RoundEndEvent. This will be handled by OrderManager, which will clear the
+        // orders list and thus unlink the current order node.
+        if (order.List is null || order.List.Count == 1) {
             shownOrder = null;
             ClearOrderText();
         } else if (order == shownOrder) {
