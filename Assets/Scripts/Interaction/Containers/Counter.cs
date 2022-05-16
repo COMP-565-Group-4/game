@@ -21,6 +21,9 @@ public sealed class Counter : Container
             // Done last to ensure it has the component before removing it.
             var item = Inventory.RemoveItem();
 
+            // add a little rotation script to the item, because why not
+            Rotator rot = item.AddComponent(typeof(Rotator)) as Rotator;
+
             // Move dish to counter and display it
             item.transform.position = transform.position;
             item.SetActive(true);
