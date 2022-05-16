@@ -30160,6 +30160,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7472401642405494779, guid: c63b80fb6f91db144bf38275d55b04d1, type: 3}
+      propertyPath: m_text
+      value: CAFE CHAOS!
+      objectReference: {fileID: 0}
     - target: {fileID: 7472401642455163597, guid: c63b80fb6f91db144bf38275d55b04d1, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
